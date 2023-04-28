@@ -3,7 +3,6 @@ using UnityEngine.InputSystem;
 
 public class scr_PlayerLook : MonoBehaviour
 {
-
     [SerializeField]
     private float sensitivity = 5;
 
@@ -11,7 +10,6 @@ public class scr_PlayerLook : MonoBehaviour
     private Transform orientation;
 
     private float mouseX, mouseY, xRot, yRot;
-
 
     private void Awake()
     {

@@ -2,15 +2,15 @@ using UnityEngine;
 
 public class scr_PlayerCam : MonoBehaviour
 {
-    private Transform player;
+    private Transform camPos;
 
     private void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        camPos = GameObject.FindGameObjectWithTag("Player").transform.GetChild(2);
     }
 
     private void Update()
     {
-        transform.position = player.position + new Vector3(0, 1.5f, 0);
+        transform.position = camPos.position;
     }
 }
