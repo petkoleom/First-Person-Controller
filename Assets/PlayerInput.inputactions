@@ -43,12 +43,12 @@
                 },
                 {
                     "name": "Sprint",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "5d810456-f9bd-4e35-b34e-96dc35d2e54e",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Crouch",
@@ -296,7 +296,7 @@
                     "name": "",
                     "id": "19507589-bc17-41dc-bc29-feb7ac9383fb",
                     "path": "<Keyboard>/leftShift",
-                    "interactions": "Press(behavior=2)",
+                    "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Sprint",

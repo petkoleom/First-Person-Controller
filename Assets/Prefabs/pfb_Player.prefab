@@ -375,12 +375,14 @@ MonoBehaviour:
   crouchScale: 0.5
   crouchSpeed: 4
   isCrouching: 0
-  force: 15
-  jumpCooldown: 0.3
+  force: 17
+  jumpCooldown: 0.25
+  slideDuration: 0.3
+  slideSpeed: 18
   ground:
     serializedVersion: 2
     m_Bits: 64
-  radius: 0.4
+  radius: 0.48
 --- !u!1 &2750374872519842953
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,7 +11,7 @@ public class scr_PlayerController : MonoBehaviour
     private Rigidbody rb;
     private Transform orientation;
 
-    //movement
+    [Header("Movement")]
     [SerializeField]
     private float walkSpeed = 9;
     [SerializeField]
@@ -27,9 +26,9 @@ public class scr_PlayerController : MonoBehaviour
     private float lastTargetSpeed;
     private Vector3 moveDir;
 
-    private bool isSprinting;
+    public bool sprintHeld;
 
-    //crouching
+    [Header("Crouching")]
     [SerializeField]
     private float crouchScale;
     [SerializeField]
@@ -37,9 +36,9 @@ public class scr_PlayerController : MonoBehaviour
 
     private Vector3 originalScale;
     private Transform camPos;
-    private bool isCrouching;
+    public bool crouchHeld;
 
-    //jumping
+    [Header("Jumping")]
     [SerializeField]
     private float force = 3;
     [SerializeField]
@@ -47,10 +46,16 @@ public class scr_PlayerController : MonoBehaviour
 
     private bool readyToJump = true;
 
-    //sliding
-    private bool isSliding;
+    [Header("Sliding")]
+    [SerializeField]
+    private float slideDuration;
+    [SerializeField]
+    private float slideSpeed;
 
-    //ground check
+    private bool slideHeld;
+
+
+    [Header("Ground")]
     [SerializeField]
     private LayerMask ground;
     [SerializeField]
@@ -85,6 +90,7 @@ public class scr_PlayerController : MonoBehaviour
     private void Update()
     {
         StateHandler();
+
     }
 
     #endregion
@@ -95,22 +101,24 @@ public class scr_PlayerController : MonoBehaviour
 
     private void StateHandler()
     {
-        if (IsGrounded() && isSliding)
+        //print(state);
+
+        if (IsGrounded() && slideHeld)
         {
             state = MovementState.Sliding;
-            targetSpeed = 20;
+            targetSpeed = slideSpeed;
         }
-        else if(IsGrounded() && isCrouching) 
+        else if (IsGrounded() && crouchHeld)
         {
             state = MovementState.Crouching;
             targetSpeed = crouchSpeed;
         }
-        else if(IsGrounded() && isSprinting)
+        else if (IsGrounded() && sprintHeld)
         {
             state = MovementState.Sprinting;
             targetSpeed = sprintSpeed;
         }
-        else if(IsGrounded() && rb.velocity.magnitude > .1f)
+        else if (IsGrounded() && rb.velocity.magnitude > .1f)
         {
             state = MovementState.Walking;
             targetSpeed = walkSpeed;
@@ -137,7 +145,7 @@ public class scr_PlayerController : MonoBehaviour
         if (IsGrounded())
             rb.AddForce(move.normalized * speed * 10, ForceMode.Force);
         else
-            rb.AddForce(move.normalized * 10 * airMultiplier, ForceMode.Force);
+            rb.AddForce(move.normalized * 20 * airMultiplier, ForceMode.Force);
     }
 
     private void SpeedLimiting()
@@ -166,23 +174,24 @@ public class scr_PlayerController : MonoBehaviour
     public void OnMove(InputValue value)
     {
         moveDir = new Vector3(value.Get<Vector2>().x, 0, value.Get<Vector2>().y);
-        
+
     }
     #endregion
 
     #region - Sprinting -
-
+    
     public void OnSprint(InputValue value)
     {
-        if (!isSprinting)
+        if (!sprintHeld && moveDir.z > 0)
         {
-            isSprinting = true; 
+            sprintHeld = true;
         }
         else
         {
-            isSprinting = false;
+            sprintHeld = false;
         }
     }
+
 
     #endregion
 
@@ -190,6 +199,14 @@ public class scr_PlayerController : MonoBehaviour
 
     public void OnJump(InputValue value)
     {
+        if (state == MovementState.Sliding)
+            return;
+        if(state == MovementState.Crouching)
+        {
+            transform.localScale = originalScale;
+            crouchHeld = false;
+            return;
+        }
         Jump();
         readyToJump = false;
         Invoke(nameof(ResetJump), jumpCooldown);
@@ -212,17 +229,38 @@ public class scr_PlayerController : MonoBehaviour
 
     public void OnCrouch(InputValue value)
     {
-        if (!isCrouching)
+        if (state == MovementState.Sprinting)
+            StartCoroutine(Slide());
+        else
+            Crouch();
+    }
+
+    private void Crouch()
+    {
+        if (!crouchHeld)
         {
-            isCrouching = true;
+            crouchHeld = true;
             transform.localScale = new Vector3(1, crouchScale, 1);
         }
         else
         {
-            isCrouching = false;
+            crouchHeld = false;
             transform.localScale = originalScale;
-
         }
+    }
+
+    #endregion
+
+    #region - Sliding -
+
+    private IEnumerator Slide()
+    {
+        slideHeld = true;
+        transform.localScale = new Vector3(1, crouchScale, 1);
+        yield return new WaitForSeconds(slideDuration);
+        slideHeld = false;
+        transform.localScale = originalScale;
+        //Crouch();
     }
 
     #endregion
