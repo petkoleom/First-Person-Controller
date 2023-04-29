@@ -26,6 +26,7 @@ public class scr_PlayerController : MonoBehaviour
     private float lastTargetSpeed;
     private Vector3 moveDir;
 
+    public bool walkingBack;
     public bool sprintHeld;
 
     [Header("Crouching")]
@@ -101,7 +102,7 @@ public class scr_PlayerController : MonoBehaviour
 
     private void StateHandler()
     {
-        //print(state);
+        scr_UIManager.Instance.UpdateState(state);
 
         if (IsGrounded() && slideHeld)
         {
@@ -113,7 +114,7 @@ public class scr_PlayerController : MonoBehaviour
             state = MovementState.Crouching;
             targetSpeed = crouchSpeed;
         }
-        else if (IsGrounded() && sprintHeld)
+        else if (IsGrounded() && sprintHeld && !walkingBack)
         {
             state = MovementState.Sprinting;
             targetSpeed = sprintSpeed;
@@ -146,6 +147,8 @@ public class scr_PlayerController : MonoBehaviour
             rb.AddForce(move.normalized * speed * 10, ForceMode.Force);
         else
             rb.AddForce(move.normalized * 20 * airMultiplier, ForceMode.Force);
+
+        walkingBack = moveDir.z < 0;
     }
 
     private void SpeedLimiting()
@@ -159,11 +162,7 @@ public class scr_PlayerController : MonoBehaviour
             Vector3 limitedVel = flatVel.normalized * speed;
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
-    }
 
-    private void SetSpeed()
-    {
-        speed = targetSpeed;
     }
 
     private void DragControl()
@@ -176,13 +175,52 @@ public class scr_PlayerController : MonoBehaviour
         moveDir = new Vector3(value.Get<Vector2>().x, 0, value.Get<Vector2>().y);
 
     }
+
+
+    private void SetSpeed()
+    {
+        if(state == MovementState.Sliding)
+            speed = targetSpeed;
+
+        else if (targetSpeed - lastTargetSpeed > 4 && speed > 0)
+        {
+            //StopAllCoroutines();
+            StartCoroutine(SmoothSpeed(15));
+        }
+        else if (targetSpeed - lastTargetSpeed < -4 && speed > 0)
+        {
+            //StopAllCoroutines();
+            StartCoroutine(SmoothSpeed(50));
+        }
+        else
+            speed = targetSpeed;
+
+        
+        lastTargetSpeed = targetSpeed;
+    }
+
+    private IEnumerator SmoothSpeed(float lerpSpeed)
+    {
+        float time = 0;
+        float difference = Mathf.Abs(targetSpeed - speed);
+        float startSpeed = speed;
+
+        while(time < difference)
+        {
+            speed = Mathf.Lerp(startSpeed, targetSpeed, time / difference);
+            time += Time.deltaTime * lerpSpeed;
+            scr_UIManager.Instance.UpdateSpeed(speed);
+            yield return null;
+        }
+    }
     #endregion
 
     #region - Sprinting -
     
     public void OnSprint(InputValue value)
     {
-        if (!sprintHeld && moveDir.z > 0)
+
+        if (!sprintHeld)
         {
             sprintHeld = true;
         }
@@ -255,8 +293,10 @@ public class scr_PlayerController : MonoBehaviour
 
     private IEnumerator Slide()
     {
+        Vector3 currentDir = orientation.forward;
         slideHeld = true;
         transform.localScale = new Vector3(1, crouchScale, 1);
+        //rb.AddForce(currentDir * slideSpeed);
         yield return new WaitForSeconds(slideDuration);
         slideHeld = false;
         transform.localScale = originalScale;

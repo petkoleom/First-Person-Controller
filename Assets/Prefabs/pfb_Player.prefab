@@ -368,17 +368,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkSpeed: 9
-  sprintSpeed: 13
+  sprintSpeed: 14
   groundDrag: 8
   airMultiplier: 0.3
-  isSprinting: 0
+  sprintHeld: 0
   crouchScale: 0.5
   crouchSpeed: 4
-  isCrouching: 0
+  crouchHeld: 0
   force: 17
   jumpCooldown: 0.25
   slideDuration: 0.3
-  slideSpeed: 18
+  slideSpeed: 21
   ground:
     serializedVersion: 2
     m_Bits: 64
