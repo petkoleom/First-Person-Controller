@@ -20,11 +20,15 @@ public class scr_PlayerController : MonoBehaviour
     private float groundDrag = 5;
     [SerializeField]
     private float airMultiplier = .3f;
+    [SerializeField]
+    private float maxSlopeAngle = 5;
 
     private float speed;
     private float targetSpeed;
     private float lastTargetSpeed;
+    private Vector3 moveInput;
     private Vector3 moveDir;
+    private RaycastHit slopeHit;
 
     public bool walkingBack;
     public bool sprintHeld;
@@ -91,7 +95,6 @@ public class scr_PlayerController : MonoBehaviour
     private void Update()
     {
         StateHandler();
-
     }
 
     #endregion
@@ -104,29 +107,32 @@ public class scr_PlayerController : MonoBehaviour
     {
         scr_UIManager.Instance.UpdateState(state);
 
-        if (IsGrounded() && slideHeld)
+        if (IsGrounded())
         {
-            state = MovementState.Sliding;
-            targetSpeed = slideSpeed;
-        }
-        else if (IsGrounded() && crouchHeld)
-        {
-            state = MovementState.Crouching;
-            targetSpeed = crouchSpeed;
-        }
-        else if (IsGrounded() && sprintHeld && !walkingBack)
-        {
-            state = MovementState.Sprinting;
-            targetSpeed = sprintSpeed;
-        }
-        else if (IsGrounded() && rb.velocity.magnitude > .1f)
-        {
-            state = MovementState.Walking;
-            targetSpeed = walkSpeed;
-        }
-        else if (IsGrounded())
-        {
-            state = MovementState.Idle;
+            if (slideHeld)
+            {
+                state = MovementState.Sliding;
+                targetSpeed = slideSpeed;
+            }
+            else if (crouchHeld)
+            {
+                state = MovementState.Crouching;
+                targetSpeed = crouchSpeed;
+            }
+            else if (sprintHeld && !walkingBack && moveDir != Vector3.zero)
+            {
+                state = MovementState.Sprinting;
+                targetSpeed = sprintSpeed;
+            }
+            else if (rb.velocity.magnitude > .1f)
+            {
+                state = MovementState.Walking;
+                targetSpeed = walkSpeed;
+            }
+            else
+            {
+                state = MovementState.Idle;
+            }
         }
         else
         {
@@ -139,16 +145,22 @@ public class scr_PlayerController : MonoBehaviour
     #region - Movement -
     private void Move()
     {
-        rb.AddForce(Vector3.down * Time.deltaTime * 1500);
+        rb.useGravity = !OnSlope();
 
-        Vector3 move = orientation.forward * moveDir.z + orientation.right * moveDir.x;
+        moveDir = orientation.forward * moveInput.z + orientation.right * moveInput.x;
 
-        if (IsGrounded())
-            rb.AddForce(move.normalized * speed * 10, ForceMode.Force);
+        if (OnSlope())
+        {
+            rb.AddForce(GetSlopeMoveDir(moveDir) * speed * 10, ForceMode.Force);
+        }
+
+        else if (IsGrounded())
+            rb.AddForce(moveDir.normalized * speed * 10, ForceMode.Force);
         else
-            rb.AddForce(move.normalized * 20 * airMultiplier, ForceMode.Force);
+            rb.AddForce(moveDir.normalized * 20 * airMultiplier, ForceMode.Force);
 
-        walkingBack = moveDir.z < 0;
+        walkingBack = moveInput.z < 0;
+        scr_UIManager.Instance.UpdateSpeed(rb.velocity.magnitude);
     }
 
     private void SpeedLimiting()
@@ -156,13 +168,20 @@ public class scr_PlayerController : MonoBehaviour
         if (!IsGrounded())
             return;
 
-        Vector3 flatVel = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-        if (flatVel.magnitude > speed)
+        if (OnSlope())
         {
-            Vector3 limitedVel = flatVel.normalized * speed;
-            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            if (rb.velocity.magnitude > speed)
+                rb.velocity = rb.velocity.normalized * speed;
         }
-
+        else
+        {
+            Vector3 flatVel = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+            if (flatVel.magnitude > speed)
+            {
+                Vector3 limitedVel = flatVel.normalized * speed;
+                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            }
+        }
     }
 
     private void DragControl()
@@ -172,14 +191,14 @@ public class scr_PlayerController : MonoBehaviour
 
     public void OnMove(InputValue value)
     {
-        moveDir = new Vector3(value.Get<Vector2>().x, 0, value.Get<Vector2>().y);
+        moveInput = new Vector3(value.Get<Vector2>().x, 0, value.Get<Vector2>().y);
 
     }
 
 
     private void SetSpeed()
     {
-        if(state == MovementState.Sliding)
+        if (state == MovementState.Sliding)
             speed = targetSpeed;
 
         else if (targetSpeed - lastTargetSpeed > 4 && speed > 0)
@@ -195,7 +214,7 @@ public class scr_PlayerController : MonoBehaviour
         else
             speed = targetSpeed;
 
-        
+
         lastTargetSpeed = targetSpeed;
     }
 
@@ -205,18 +224,24 @@ public class scr_PlayerController : MonoBehaviour
         float difference = Mathf.Abs(targetSpeed - speed);
         float startSpeed = speed;
 
-        while(time < difference)
+        while (time < difference)
         {
             speed = Mathf.Lerp(startSpeed, targetSpeed, time / difference);
             time += Time.deltaTime * lerpSpeed;
-            scr_UIManager.Instance.UpdateSpeed(speed);
             yield return null;
         }
     }
+
+    private Vector3 GetSlopeMoveDir(Vector3 direction)
+    {
+        return Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
+    }
+
+
     #endregion
 
     #region - Sprinting -
-    
+
     public void OnSprint(InputValue value)
     {
 
@@ -239,7 +264,7 @@ public class scr_PlayerController : MonoBehaviour
     {
         if (state == MovementState.Sliding)
             return;
-        if(state == MovementState.Crouching)
+        if (state == MovementState.Crouching)
         {
             transform.localScale = originalScale;
             crouchHeld = false;
@@ -310,6 +335,16 @@ public class scr_PlayerController : MonoBehaviour
     public bool IsGrounded()
     {
         return Physics.OverlapSphere(transform.position, radius, ground).Length > 0 ? true : false;
+    }
+
+    public bool OnSlope()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, .3f))
+        {
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+            return angle < maxSlopeAngle && angle != 0;
+        }
+        return false;
     }
 
     #endregion
