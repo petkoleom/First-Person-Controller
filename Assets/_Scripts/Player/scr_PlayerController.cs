@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,7 +21,7 @@ public class scr_PlayerController : MonoBehaviour
     [SerializeField]
     private float airMultiplier = .3f;
     [SerializeField]
-    private float maxSlopeAngle = 5;
+    private float maxSlopeAngle = 40;
 
     private float speed;
     private float targetSpeed;
@@ -50,9 +49,10 @@ public class scr_PlayerController : MonoBehaviour
     [SerializeField]
     private float jumpCooldown = .3f;
 
+    private Vector3 normalVector = Vector3.up;
     public bool jumpingHeld;
     private bool readyToJump = true;
-    private Vector3 normalVector = Vector3.up;
+
 
     [Header("Sliding")]
     [SerializeField]
@@ -62,15 +62,13 @@ public class scr_PlayerController : MonoBehaviour
 
     private bool slideHeld;
 
-
     [Header("Ground")]
     [SerializeField]
     private LayerMask ground;
 
+    GameObject currentGroundObject;
     public bool isGrounded;
     private bool cancellingGrounded;
-    private bool isColliding;
-    private Collision collision;
 
     #endregion
 
@@ -81,7 +79,6 @@ public class scr_PlayerController : MonoBehaviour
         //refs
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-
         orientation = transform.GetChild(0);
 
         //initializations
@@ -97,14 +94,12 @@ public class scr_PlayerController : MonoBehaviour
         SpeedLimiting();
         SetSpeed();
 
-
         Jump();
     }
 
     private void Update()
     {
         StateHandler();
-        
     }
 
     #endregion
@@ -119,7 +114,7 @@ public class scr_PlayerController : MonoBehaviour
 
         if (isGrounded)
         {
-            if (slideHeld)
+            if (slideHeld && rb.velocity.y <= 0)
             {
                 state = MovementState.Sliding;
                 targetSpeed = slideSpeed;
@@ -156,7 +151,6 @@ public class scr_PlayerController : MonoBehaviour
     private void Move()
     {
         rb.useGravity = !OnSlope();
-        
 
         moveDir = orientation.forward * moveInput.z + orientation.right * moveInput.x;
 
@@ -203,9 +197,7 @@ public class scr_PlayerController : MonoBehaviour
     public void OnMove(InputValue value)
     {
         moveInput = new Vector3(value.Get<Vector2>().x, 0, value.Get<Vector2>().y);
-
     }
-
 
     private void SetSpeed()
     {
@@ -222,7 +214,6 @@ public class scr_PlayerController : MonoBehaviour
         }
         else
             speed = targetSpeed;
-
 
         lastTargetSpeed = targetSpeed;
     }
@@ -279,9 +270,7 @@ public class scr_PlayerController : MonoBehaviour
             crouchHeld = false;
             return;
         }
-
         jumpingHeld = !jumpingHeld;
-
     }
     private void Jump()
     {
@@ -298,9 +287,7 @@ public class scr_PlayerController : MonoBehaviour
                 rb.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
 
             Invoke(nameof(ResetJump), jumpCooldown);
-            
         }
-           
     }
 
     private void ResetJump()
@@ -374,7 +361,7 @@ public class scr_PlayerController : MonoBehaviour
         return angle < maxSlopeAngle;
     }
 
-    GameObject currentGroundObject;
+
     private void OnCollisionStay(Collision collisionInfo)
     {
         foreach (ContactPoint contact in collisionInfo.contacts)
@@ -405,17 +392,9 @@ public class scr_PlayerController : MonoBehaviour
         }
     }
 
-
     #endregion
 
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position + new Vector3(0, .4f, 0), .5f);
-    }
 }
-
-
 
 [Serializable]
 public enum MovementState
