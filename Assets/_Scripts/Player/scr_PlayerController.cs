@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -51,6 +52,7 @@ public class scr_PlayerController : MonoBehaviour
 
     public bool jumpingHeld;
     private bool readyToJump = true;
+    private Vector3 normalVector = Vector3.up;
 
     [Header("Sliding")]
     [SerializeField]
@@ -64,8 +66,11 @@ public class scr_PlayerController : MonoBehaviour
     [Header("Ground")]
     [SerializeField]
     private LayerMask ground;
-    [SerializeField]
-    private float radius = .5f;
+
+    public bool isGrounded;
+    private bool cancellingGrounded;
+    private bool isColliding;
+    private Collision collision;
 
     #endregion
 
@@ -76,13 +81,13 @@ public class scr_PlayerController : MonoBehaviour
         //refs
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+
         orientation = transform.GetChild(0);
 
         //initializations
-        speed = walkSpeed;
-
         originalScale = transform.localScale;
         camPos = transform.GetChild(2);
+
     }
 
     private void FixedUpdate()
@@ -92,12 +97,14 @@ public class scr_PlayerController : MonoBehaviour
         SpeedLimiting();
         SetSpeed();
 
+
         Jump();
     }
 
     private void Update()
     {
         StateHandler();
+        
     }
 
     #endregion
@@ -110,7 +117,7 @@ public class scr_PlayerController : MonoBehaviour
     {
         scr_UIManager.Instance.UpdateState(state);
 
-        if (IsGrounded())
+        if (isGrounded)
         {
             if (slideHeld)
             {
@@ -127,7 +134,7 @@ public class scr_PlayerController : MonoBehaviour
                 state = MovementState.Sprinting;
                 targetSpeed = sprintSpeed;
             }
-            else if (rb.velocity.magnitude > .1f)
+            else if (rb.velocity.magnitude > 0)
             {
                 state = MovementState.Walking;
                 targetSpeed = walkSpeed;
@@ -149,6 +156,7 @@ public class scr_PlayerController : MonoBehaviour
     private void Move()
     {
         rb.useGravity = !OnSlope();
+        
 
         moveDir = orientation.forward * moveInput.z + orientation.right * moveInput.x;
 
@@ -157,7 +165,7 @@ public class scr_PlayerController : MonoBehaviour
             rb.AddForce(GetSlopeMoveDir(moveDir) * speed * 10, ForceMode.Force);
         }
 
-        else if (IsGrounded())
+        else if (isGrounded)
             rb.AddForce(moveDir.normalized * speed * 10, ForceMode.Force);
         else
             rb.AddForce(moveDir.normalized * 20 * airMultiplier, ForceMode.Force);
@@ -168,7 +176,7 @@ public class scr_PlayerController : MonoBehaviour
 
     private void SpeedLimiting()
     {
-        if (!IsGrounded())
+        if (!isGrounded)
             return;
 
         if (OnSlope())
@@ -189,7 +197,7 @@ public class scr_PlayerController : MonoBehaviour
 
     private void DragControl()
     {
-        rb.drag = IsGrounded() ? groundDrag : 0;
+        rb.drag = isGrounded ? groundDrag : 0;
     }
 
     public void OnMove(InputValue value)
@@ -206,12 +214,10 @@ public class scr_PlayerController : MonoBehaviour
 
         else if (targetSpeed - lastTargetSpeed > 4 && speed > 0)
         {
-            //StopAllCoroutines();
             StartCoroutine(SmoothSpeed(15));
         }
         else if (targetSpeed - lastTargetSpeed < -4 && speed > 0)
         {
-            //StopAllCoroutines();
             StartCoroutine(SmoothSpeed(50));
         }
         else
@@ -279,11 +285,20 @@ public class scr_PlayerController : MonoBehaviour
     }
     private void Jump()
     {
-        if (jumpingHeld && IsGrounded() && readyToJump)
+        if (jumpingHeld && isGrounded && readyToJump)
         {
             readyToJump = false;
-            Invoke(nameof(ResetJump), jumpCooldown);
             rb.AddForce(Vector3.up * force, ForceMode.Impulse);
+            rb.AddForce(normalVector * force * 0.5f);
+
+            Vector3 vel = rb.velocity;
+            if (rb.velocity.y < 0.5f)
+                rb.velocity = new Vector3(vel.x, 0, vel.z);
+            else if (rb.velocity.y > 0)
+                rb.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
+
+            Invoke(nameof(ResetJump), jumpCooldown);
+            
         }
            
     }
@@ -307,7 +322,7 @@ public class scr_PlayerController : MonoBehaviour
 
     private void Crouch()
     {
-        if (!IsGrounded())
+        if (!isGrounded)
             return;
 
         if (!crouchHeld)
@@ -342,11 +357,6 @@ public class scr_PlayerController : MonoBehaviour
 
     #region - Ground Check -
 
-    public bool IsGrounded()
-    {
-        return Physics.OverlapSphere(transform.position, radius, ground).Length > 0 ? true : false;
-    }
-
     public bool OnSlope()
     {
         if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, .3f))
@@ -357,8 +367,55 @@ public class scr_PlayerController : MonoBehaviour
         return false;
     }
 
+
+    private bool IsFloor(Vector3 v)
+    {
+        float angle = Vector3.Angle(Vector3.up, v);
+        return angle < maxSlopeAngle;
+    }
+
+    GameObject currentGroundObject;
+    private void OnCollisionStay(Collision collisionInfo)
+    {
+        foreach (ContactPoint contact in collisionInfo.contacts)
+        {
+            Vector3 normal = contact.normal;
+            if (IsFloor(normal))
+            {
+                isGrounded = true;
+                normalVector = normal;
+                currentGroundObject = contact.otherCollider.gameObject;
+                return;
+            }
+
+            else if (currentGroundObject == contact.otherCollider.gameObject)
+            {
+                isGrounded = false;
+                currentGroundObject = null;
+            }
+        }
+    }
+
+    private void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject == currentGroundObject)
+        {
+            isGrounded = false;
+            currentGroundObject = null;
+        }
+    }
+
+
     #endregion
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position + new Vector3(0, .4f, 0), .5f);
+    }
 }
+
+
 
 [Serializable]
 public enum MovementState

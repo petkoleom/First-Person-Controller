@@ -599,7 +599,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1376577255, guid: 7a5641e5ca908134cbb775d6637c8cad, type: 3}
       propertyPath: radius
-      value: 0.3
+      value: 0.45
       objectReference: {fileID: 0}
     - target: {fileID: 1376577255, guid: 7a5641e5ca908134cbb775d6637c8cad, type: 3}
       propertyPath: slideSpeed
@@ -611,7 +611,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1376577255, guid: 7a5641e5ca908134cbb775d6637c8cad, type: 3}
       propertyPath: jumpCooldown
-      value: 0.05
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 1376577255, guid: 7a5641e5ca908134cbb775d6637c8cad, type: 3}
       propertyPath: maxSlopeAngle
