@@ -49,6 +49,7 @@ public class scr_PlayerController : MonoBehaviour
     [SerializeField]
     private float jumpCooldown = .3f;
 
+    public bool jumpingHeld;
     private bool readyToJump = true;
 
     [Header("Sliding")]
@@ -90,6 +91,8 @@ public class scr_PlayerController : MonoBehaviour
         DragControl();
         SpeedLimiting();
         SetSpeed();
+
+        Jump();
     }
 
     private void Update()
@@ -270,15 +273,19 @@ public class scr_PlayerController : MonoBehaviour
             crouchHeld = false;
             return;
         }
-        Jump();
-        readyToJump = false;
-        Invoke(nameof(ResetJump), jumpCooldown);
+
+        jumpingHeld = !jumpingHeld;
 
     }
     private void Jump()
     {
-        if (IsGrounded() && readyToJump)
+        if (jumpingHeld && IsGrounded() && readyToJump)
+        {
+            readyToJump = false;
+            Invoke(nameof(ResetJump), jumpCooldown);
             rb.AddForce(Vector3.up * force, ForceMode.Impulse);
+        }
+           
     }
 
     private void ResetJump()
@@ -300,6 +307,9 @@ public class scr_PlayerController : MonoBehaviour
 
     private void Crouch()
     {
+        if (!IsGrounded())
+            return;
+
         if (!crouchHeld)
         {
             crouchHeld = true;
