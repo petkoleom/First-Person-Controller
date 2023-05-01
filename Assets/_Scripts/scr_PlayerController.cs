@@ -148,21 +148,29 @@ public class scr_PlayerController : MonoBehaviour
     #endregion
 
     #region - Movement -
+
+
     private void Move()
     {
         rb.useGravity = !OnSlope();
+        var stopSpeed = speed * .8f;
+
 
         moveDir = orientation.forward * moveInput.z + orientation.right * moveInput.x;
 
         if (OnSlope())
         {
-            rb.AddForce(GetSlopeMoveDir(moveDir) * speed * 10, ForceMode.Force);
+            rb.AddForce(GetSlopeMoveDir(moveDir) * speed, ForceMode.Impulse);
+            
         }
 
         else if (isGrounded)
-            rb.AddForce(moveDir.normalized * speed * 10, ForceMode.Force);
+            rb.AddForce(moveDir.normalized * speed, ForceMode.Impulse);
         else
-            rb.AddForce(moveDir.normalized * 20 * airMultiplier, ForceMode.Force);
+            rb.AddForce(moveDir.normalized * speed * airMultiplier, ForceMode.Impulse);
+
+        
+        
 
         walkingBack = moveInput.z < 0;
         scr_UIManager.Instance.UpdateSpeed(rb.velocity.magnitude);
@@ -232,6 +240,7 @@ public class scr_PlayerController : MonoBehaviour
         }
     }
 
+
     private Vector3 GetSlopeMoveDir(Vector3 direction)
     {
         return Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
@@ -262,14 +271,15 @@ public class scr_PlayerController : MonoBehaviour
 
     public void OnJump(InputValue value)
     {
-        if (state == MovementState.Sliding)
+        if (state == MovementState.Sliding || state == MovementState.Crouching)
             return;
+        /*
         if (state == MovementState.Crouching)
         {
             transform.localScale = originalScale;
             crouchHeld = false;
             return;
-        }
+        }*/
         jumpingHeld = !jumpingHeld;
     }
     private void Jump()
@@ -354,6 +364,18 @@ public class scr_PlayerController : MonoBehaviour
         return false;
     }
 
+    public bool OnStairs()
+    {
+        Collider[] cols = Physics.OverlapSphere(transform.position + new Vector3(0, .35f, 0), .48f, ground);
+        foreach (var col in cols)
+        {
+            if (col.transform.tag == "Stairs")
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private bool IsFloor(Vector3 v)
     {
@@ -396,13 +418,4 @@ public class scr_PlayerController : MonoBehaviour
 
 }
 
-[Serializable]
-public enum MovementState
-{
-    Idle,
-    Walking,
-    Sprinting,
-    Crouching,
-    Sliding,
-    Air
-}
+

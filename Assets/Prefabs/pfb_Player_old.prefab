@@ -302,12 +302,10 @@ GameObject:
   - component: {fileID: 4555868792539503093}
   - component: {fileID: 4555868792539503090}
   - component: {fileID: 4555868792539503095}
-  - component: {fileID: 6072631905070817842}
+  - component: {fileID: 7489014109893033794}
   - component: {fileID: 4555868792539503092}
-  - component: {fileID: 1574660102}
-  - component: {fileID: 1574660103}
-  - component: {fileID: 5549597495145294418}
-  - component: {fileID: 1574660105}
+  - component: {fileID: 7798206427138839019}
+  - component: {fileID: 5992418629925816374}
   m_Layer: 0
   m_Name: First Person Player
   m_TagString: Player
@@ -379,7 +377,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
---- !u!114 &6072631905070817842
+--- !u!114 &7489014109893033794
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -388,9 +386,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 4555868792539503088}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1bad84ca4f77fed4ea5707dce70a9515, type: 3}
+  m_Script: {fileID: 11500000, guid: 86ae06a5e8585fa45be70f855a138d80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerLook: {fileID: 0}
+  playerGrounded: {fileID: 0}
+  playerMove: {fileID: 0}
+  playerJump: {fileID: 0}
+  playerSprint: {fileID: 0}
+  playerCrouch: {fileID: 0}
 --- !u!114 &4555868792539503092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -405,7 +409,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   sensitivity: 5
---- !u!114 &1574660102
+--- !u!114 &7798206427138839019
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -414,31 +418,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 4555868792539503088}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 622ef3b8bdfcf2c498c37c9dd4672357, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  walkSpeed: 7
-  groundDrag: 8
-  airMultiplier: 0.6
---- !u!114 &1574660103
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4555868792539503088}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ffe5b9d65191a544b0d33c4c3016830, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b4a7b896149ad04f858cc7c5506f45c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   ground:
     serializedVersion: 2
-    m_Bits: 64
-  radius: 0.4
---- !u!114 &5549597495145294418
+    m_Bits: 0
+  radius: 0.5
+  maxSlopeAngle: 40
+  isGrounded: 0
+--- !u!114 &5992418629925816374
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -447,29 +437,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 4555868792539503088}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f5d12ba48189cc4595108e4989669c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  force: 18
-  jumpCooldown: 0.3
---- !u!114 &1574660105
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4555868792539503088}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba879e5bdae4b394496f89780a41a58c, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b671384f6c38324d8073010c5921ab8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   walkSpeed: 9
+  sprintSpeed: 13
   groundDrag: 5
   airMultiplier: 0.3
-  sprintSpeed: 13
+  maxSlopeAngle: 40
+  walkingBack: 0
+  sprintHeld: 0
 --- !u!1 &6093826177408839626
 GameObject:
   m_ObjectHideFlags: 0
