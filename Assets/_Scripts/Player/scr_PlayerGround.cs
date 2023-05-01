@@ -11,6 +11,7 @@ public class scr_PlayerGround : scr_PlayerBehaviour
     private GameObject currentGroundObject;
     [HideInInspector]
     public RaycastHit slopeHit;
+    private Vector3 currentGroundNormal = Vector3.up;
 
     private bool IsFloor(Vector3 v)
     {
@@ -26,7 +27,7 @@ public class scr_PlayerGround : scr_PlayerBehaviour
             if (IsFloor(normal))
             {
                 isGrounded = true;
-                //normalVector = normal;
+                currentGroundNormal = normal;
                 currentGroundObject = contact.otherCollider.gameObject;
                 return;
             }
@@ -50,12 +51,17 @@ public class scr_PlayerGround : scr_PlayerBehaviour
 
     public bool OnSlope()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, .5f))
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, .2f))
         {
             float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
             return angle < maxSlopeAngle && angle != 0;
         }
         return false;
+    }
+
+    public Vector3 GetCurrentGroundNormal()
+    {
+        return currentGroundNormal;
     }
 
 

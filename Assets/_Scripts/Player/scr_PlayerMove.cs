@@ -26,9 +26,10 @@ public class scr_PlayerMove : scr_PlayerBehaviour
     private void FixedUpdate()
     {
         Move();
-        DragControl();
+        //DragControl();
         SpeedLimiting();
         SetSpeed();
+        CounterMovement();
     }
 
     public void OnMove(InputValue value)
@@ -38,15 +39,15 @@ public class scr_PlayerMove : scr_PlayerBehaviour
 
     private void Move()
     {
+        var dragMod = groundDrag / 10;
         moveDir = player.orientation.forward * moveInput.z + player.orientation.right * moveInput.x;
         walkingBack = moveInput.z < 0;
-
-        if (player.playerGround.isGrounded)
-            player.rb.AddForce(moveDir.normalized * speed * 10, ForceMode.Acceleration);
-        else if (player.playerGround.OnSlope() && player.playerGround.isGrounded)
-            player.rb.AddForce(GetSlopeMoveDir(moveDir) * speed * 10, ForceMode.Acceleration);
+        if (player.playerGround.OnSlope())
+            player.rb.AddForce(GetSlopeMoveDir(moveDir) * speed * 10 * dragMod, ForceMode.Acceleration);
+        else if (player.playerGround.isGrounded)
+            player.rb.AddForce(moveDir.normalized * speed * 10 * dragMod, ForceMode.Acceleration);
         else
-            player.rb.AddForce(moveDir.normalized * speed * 10 * airMultiplier, ForceMode.Acceleration);
+            player.rb.AddForce(moveDir.normalized * speed * 10 * dragMod * airMultiplier, ForceMode.Acceleration);
 
         scr_UIManager.Instance.UpdateSpeed(player.rb.velocity.magnitude);
     }
@@ -56,8 +57,33 @@ public class scr_PlayerMove : scr_PlayerBehaviour
         return Vector3.ProjectOnPlane(direction, player.playerGround.slopeHit.normal).normalized;
     }
 
+    void CounterMovement()
+    {
+
+        player.rb.useGravity = !player.playerGround.OnSlope();
+        //player.rb.drag = player.playerGround.isGrounded ? groundDrag : 0;
+
+        Vector3 vel = player.rb.velocity;
+        //vel.y = player.rb.velocity.y;
+
+        float coefficientOfFriction = (speed * groundDrag) / targetSpeed;
+
+        if (player.playerGround.isGrounded)
+            player.rb.AddForce(-vel * coefficientOfFriction, ForceMode.Acceleration);
+        
+
+    }
+
+
     private void SpeedLimiting()
     {
+
+        if (player.playerGround.OnSlope())
+        {
+            if (player.rb.velocity.magnitude > speed)
+                player.rb.velocity = player.rb.velocity.normalized * speed;
+        }
+
         Vector3 flatVel = new Vector3(player.rb.velocity.x, 0, player.rb.velocity.z);
         if (player.playerGround.isGrounded)
         {
@@ -83,12 +109,6 @@ public class scr_PlayerMove : scr_PlayerBehaviour
                 player.rb.velocity = new Vector3(limitedVel.x, player.rb.velocity.y, limitedVel.z);
             }
         }
-    }
-
-    private void DragControl()
-    {
-        player.rb.useGravity = !player.playerGround.OnSlope();
-        player.rb.drag = player.playerGround.isGrounded ? groundDrag : 0;
     }
 
     private void SetSpeed()

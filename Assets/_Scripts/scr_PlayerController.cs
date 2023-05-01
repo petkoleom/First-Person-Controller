@@ -153,7 +153,6 @@ public class scr_PlayerController : MonoBehaviour
     private void Move()
     {
         rb.useGravity = !OnSlope();
-        var stopSpeed = speed * .8f;
 
 
         moveDir = orientation.forward * moveInput.z + orientation.right * moveInput.x;

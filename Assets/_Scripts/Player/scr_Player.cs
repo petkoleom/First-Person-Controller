@@ -95,7 +95,7 @@ public class scr_Player : MonoBehaviour
                 state = MovementState.Sprinting;
                 playerMove.SetTargetSpeed(playerSprint.GetStateSpeed());
             }
-            else if (rb.velocity.magnitude > 0)
+            else if (rb.velocity.magnitude > .01f)
             {
                 state = MovementState.Walking;
                 playerMove.SetTargetSpeed(playerMove.GetStateSpeed());

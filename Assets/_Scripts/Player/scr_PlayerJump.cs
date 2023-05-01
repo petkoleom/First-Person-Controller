@@ -9,7 +9,6 @@ public class scr_PlayerJump : scr_PlayerBehaviour
     [SerializeField]
     private float jumpCooldown = .3f;
 
-    private Vector3 normalVector = Vector3.up;
     public bool jumpingHeld;
     private bool readyToJump = true;
 
@@ -35,7 +34,6 @@ public class scr_PlayerJump : scr_PlayerBehaviour
 
             player.rb.velocity = new Vector3(player.rb.velocity.x, 0f, player.rb.velocity.z);
             player.rb.AddForce(Vector3.up * force, ForceMode.Impulse);
-
             Invoke(nameof(ResetJump), jumpCooldown);
         }
     }

@@ -13,6 +13,6 @@ public class scr_UIManager : StaticInstance<scr_UIManager>
 
     public void UpdateSpeed(float speed)
     {
-        this.speed.text = speed.ToString();
+        this.speed.text = speed.ToString("F2");
     }
 }

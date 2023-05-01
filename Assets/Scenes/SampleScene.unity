@@ -3843,11 +3843,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1700939415, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
       propertyPath: force
-      value: 20
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 1700939416, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
       propertyPath: sprintSpeed
-      value: 16
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 4555868792055335536, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
       propertyPath: m_RootOrder
@@ -3898,8 +3898,12 @@ PrefabInstance:
       value: pfb_Player_old
       objectReference: {fileID: 0}
     - target: {fileID: 5992418629925816374, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
+      propertyPath: walkSpeed
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5992418629925816374, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
       propertyPath: groundDrag
-      value: 8
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
