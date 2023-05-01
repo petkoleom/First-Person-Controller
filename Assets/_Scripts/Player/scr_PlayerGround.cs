@@ -50,7 +50,7 @@ public class scr_PlayerGround : scr_PlayerBehaviour
 
     public bool OnSlope()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, .3f))
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, .5f))
         {
             float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
             return angle < maxSlopeAngle && angle != 0;

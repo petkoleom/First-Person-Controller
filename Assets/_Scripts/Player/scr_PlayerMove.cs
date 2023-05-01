@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,8 +12,6 @@ public class scr_PlayerMove : scr_PlayerBehaviour
     private float groundDrag = 5;
     [SerializeField]
     private float airMultiplier = .3f;
-    [SerializeField]
-    private float airSpeed = .3f;
 
     private float speed;
     private float targetSpeed;
@@ -29,7 +28,12 @@ public class scr_PlayerMove : scr_PlayerBehaviour
         Move();
         DragControl();
         SpeedLimiting();
-        SetTargetSpeed(walkSpeed);
+        SetSpeed();
+    }
+
+    public void OnMove(InputValue value)
+    {
+        moveInput = new Vector3(value.Get<Vector2>().x, 0, value.Get<Vector2>().y);
     }
 
     private void Move()
@@ -63,11 +67,11 @@ public class scr_PlayerMove : scr_PlayerBehaviour
                 player.rb.velocity = new Vector3(limitedVel.x, player.rb.velocity.y, limitedVel.z);
             }
         } 
-        else if(player.state == MovementState.Sprinting)
+        else if(speed > walkSpeed)
         {
-            if (flatVel.magnitude > speed)
+            if (flatVel.magnitude > speed * .8f)
             {
-                Vector3 limitedVel = flatVel.normalized * speed * 1.5f;
+                Vector3 limitedVel = flatVel.normalized * speed * .8f;
                 player.rb.velocity = new Vector3(limitedVel.x, player.rb.velocity.y, limitedVel.z);
             }
         }
@@ -87,14 +91,40 @@ public class scr_PlayerMove : scr_PlayerBehaviour
         player.rb.drag = player.playerGround.isGrounded ? groundDrag : 0;
     }
 
-    public void OnMove(InputValue value)
+    private void SetSpeed()
     {
-        moveInput = new Vector3(value.Get<Vector2>().x, 0, value.Get<Vector2>().y);
+
+        if (targetSpeed - lastTargetSpeed > 4 && speed > 0)
+        {
+            StartCoroutine(SmoothSpeed(15));
+        }
+        else if (targetSpeed - lastTargetSpeed < -4 && speed > 0)
+        {
+            StartCoroutine(SmoothSpeed(50));
+        }
+        else
+            speed = targetSpeed;
+
+        lastTargetSpeed = targetSpeed;
     }
 
-    public virtual void SetTargetSpeed(float speed)
+    private IEnumerator SmoothSpeed(float lerpSpeed)
     {
-        this.speed = speed;
+        float time = 0;
+        float difference = Mathf.Abs(targetSpeed - speed);
+        float startSpeed = speed;
+
+        while (time < difference)
+        {
+            speed = Mathf.Lerp(startSpeed, targetSpeed, time / difference);
+            time += Time.deltaTime * lerpSpeed;
+            yield return null;
+        }
+    }
+
+    public void SetTargetSpeed(float speed)
+    {
+        targetSpeed = speed;
     }
 
     public float GetStateSpeed()

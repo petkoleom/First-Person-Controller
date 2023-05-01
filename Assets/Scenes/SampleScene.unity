@@ -3841,9 +3841,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4555868791985646035, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.5
+    - target: {fileID: 1700939415, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
+      propertyPath: force
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1700939416, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
+      propertyPath: sprintSpeed
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 4555868792055335536, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
       propertyPath: m_RootOrder
@@ -3894,78 +3898,11 @@ PrefabInstance:
       value: pfb_Player_old
       objectReference: {fileID: 0}
     - target: {fileID: 5992418629925816374, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
-      propertyPath: airSpeed
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5992418629925816374, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
-      propertyPath: walkSpeed
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 5992418629925816374, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
       propertyPath: groundDrag
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 5992418629925816374, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
-      propertyPath: airMultiplier
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7798206427138839019, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
-      propertyPath: ground.m_Bits
-      value: 64
-      objectReference: {fileID: 0}
-    - target: {fileID: 7798206427138839019, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
-      propertyPath: maxSlopeAngle
-      value: 40
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
---- !u!1 &1700939405 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4555868792539503088, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
-  m_PrefabInstance: {fileID: 1691364413}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1700939414 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7489014109893033794, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
-  m_PrefabInstance: {fileID: 1691364413}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1700939405}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86ae06a5e8585fa45be70f855a138d80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1700939415
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1700939405}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87e3e64b4b90e394298be6e5ef9686ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 1700939414}
-  force: 21
-  jumpCooldown: 0.25
-  jumpingHeld: 0
---- !u!114 &1700939416
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1700939405}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceffbf64ac4874242a821f1f25f2d2ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  sprintSpeed: 20
-  sprintingHeld: 0
 --- !u!1 &1706757297
 GameObject:
   m_ObjectHideFlags: 0
