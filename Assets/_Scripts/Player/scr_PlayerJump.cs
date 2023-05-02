@@ -28,14 +28,23 @@ public class scr_PlayerJump : scr_PlayerBehaviour
     }
     private void Jump()
     {
-        if (jumpingHeld && player.playerGround.isGrounded && readyToJump)
+        if (jumpingHeld && player.playerGround.isGrounded && readyToJump && player.state != MovementState.Sliding)
         {
-            readyToJump = false;
-
-            player.rb.velocity = new Vector3(player.rb.velocity.x, 0f, player.rb.velocity.z);
-            player.rb.AddForce(Vector3.up * force, ForceMode.Impulse);
-            Invoke(nameof(ResetJump), jumpCooldown);
+            if (player.state == MovementState.Crouching)
+            {
+                player.playerCrouch.StandUp();
+                readyToJump = false;
+                Invoke(nameof(ResetJump), jumpCooldown);
+            }
+            else
+            {
+                readyToJump = false;
+                player.rb.velocity = new Vector3(player.rb.velocity.x, 0f, player.rb.velocity.z);
+                player.rb.AddForce(Vector3.up * force, ForceMode.Impulse);
+                Invoke(nameof(ResetJump), jumpCooldown);
+            }
         }
+
     }
 
     private void ResetJump()

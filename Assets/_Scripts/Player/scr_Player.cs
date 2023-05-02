@@ -55,42 +55,21 @@ public class scr_Player : MonoBehaviour
     private void StateHandler()
     {
         scr_UIManager.Instance.UpdateState(state);
-        /*
-        if (playerGrounded.isGrounded)
-        {
-            if (slideHeld && rb.velocity.y <= 0)
-            {
-                state = MovementState.Sliding;
-                targetSpeed = slideSpeed;
-            }
-            else if (crouchHeld)
-            {
-                state = MovementState.Crouching;
-                targetSpeed = crouchSpeed;
-            }
-            else if (sprintHeld && !walkingBack && moveDir != Vector3.zero)
-            {
-                state = MovementState.Sprinting;
-                targetSpeed = sprintSpeed;
-            }
-            else if (rb.velocity.magnitude > 0)
-            {
-                state = MovementState.Walking;
-                targetSpeed = walkSpeed;
-            }
-            else
-            {
-                state = MovementState.Idle;
-            }
-        }
-        else
-        {
-            state = MovementState.Air;
-        }*/
+
 
         if (playerGround.isGrounded)
         {
-            if (playerSprint.sprintingHeld && !playerMove.walkingBack && playerMove.moveDir != Vector3.zero)
+            if (playerCrouch.sliding)
+            {
+                state = MovementState.Sliding;
+                playerMove.SetTargetSpeed(playerCrouch.GetStateSpeed2());
+            }
+            else if (playerCrouch.crouching)
+            {
+                state = MovementState.Crouching;
+                playerMove.SetTargetSpeed(playerCrouch.GetStateSpeed());
+            }
+            else if (playerSprint.sprintingHeld && !playerMove.walkingBack && playerMove.moveDir != Vector3.zero)
             {
                 state = MovementState.Sprinting;
                 playerMove.SetTargetSpeed(playerSprint.GetStateSpeed());

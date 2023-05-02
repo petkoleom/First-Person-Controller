@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,17 +8,20 @@ public class scr_PlayerCrouch : scr_PlayerBehaviour
     private float crouchScale;
     [SerializeField]
     private float crouchSpeed;
+    [SerializeField]
+    private float slideDuration;
+    [SerializeField]
+    private float slideSpeed;
 
     private Vector3 originalScale;
     private Transform camPos;
 
-    private bool crouching;
+    public bool crouching;
+    public bool sliding;
 
-    private scr_PlayerMove move;
 
     private void Start()
     {
-        move = GetComponent<scr_PlayerMove>();
         originalScale = transform.localScale;
         camPos = transform.GetChild(2);
         crouching = false;
@@ -25,23 +29,48 @@ public class scr_PlayerCrouch : scr_PlayerBehaviour
 
     public void OnCrouch(InputValue value)
     {
-        if(!crouching)
+        if (player.state == MovementState.Sprinting)
+            StartCoroutine(Slide());
+        else if (!crouching && player.playerGround.isGrounded)
         {
-            crouching = true;
-            transform.localScale = new Vector3(1, crouchScale, 1);
+            Crouch();
         }
         else
         {
-            crouching = false;
-            transform.localScale = originalScale;
-
+            StandUp();
         }
     }
 
-    public void Reset()
+    public void Crouch()
+    {
+        crouching = true;
+        transform.localScale = new Vector3(1, crouchScale, 1);
+
+    }
+
+    public void StandUp()
     {
         crouching = false;
         transform.localScale = originalScale;
+    }
+
+    private IEnumerator Slide()
+    {
+        Vector3 currentDir = player.orientation.forward;
+        sliding = true;
+        transform.localScale = new Vector3(1, crouchScale, 1);
+        yield return new WaitForSeconds(slideDuration);
+        sliding = false;
+        transform.localScale = originalScale;
+    }
+
+    public float GetStateSpeed()
+    {
+        return crouchSpeed;
+    }    
+    public float GetStateSpeed2()
+    {
+        return slideSpeed;
     }
 
 }

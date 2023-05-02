@@ -61,10 +61,8 @@ public class scr_PlayerMove : scr_PlayerBehaviour
     {
 
         player.rb.useGravity = !player.playerGround.OnSlope();
-        //player.rb.drag = player.playerGround.isGrounded ? groundDrag : 0;
 
         Vector3 vel = player.rb.velocity;
-        //vel.y = player.rb.velocity.y;
 
         float coefficientOfFriction = (speed * groundDrag) / targetSpeed;
 
@@ -113,8 +111,10 @@ public class scr_PlayerMove : scr_PlayerBehaviour
 
     private void SetSpeed()
     {
+        if (player.state == MovementState.Sliding)
+            speed = targetSpeed;
 
-        if (targetSpeed - lastTargetSpeed > 4 && speed > 0)
+        else if (targetSpeed - lastTargetSpeed > 4 && speed > 0)
         {
             StartCoroutine(SmoothSpeed(15));
         }
