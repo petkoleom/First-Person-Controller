@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class scr_PlayerGround : scr_PlayerBehaviour
 {
+    [Header("Grounding")]
     [SerializeField]
     private LayerMask ground;
     [SerializeField]

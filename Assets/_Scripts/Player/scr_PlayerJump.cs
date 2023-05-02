@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(scr_PlayerGround))]
 public class scr_PlayerJump : scr_PlayerBehaviour
 {
+    [Header("Jumping")]
     [SerializeField]
     private float force = 3;
     [SerializeField]

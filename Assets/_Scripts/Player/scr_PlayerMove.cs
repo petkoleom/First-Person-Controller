@@ -59,7 +59,6 @@ public class scr_PlayerMove : scr_PlayerBehaviour
 
     void CounterMovement()
     {
-
         player.rb.useGravity = !player.playerGround.OnSlope();
 
         Vector3 vel = player.rb.velocity;
@@ -68,10 +67,7 @@ public class scr_PlayerMove : scr_PlayerBehaviour
 
         if (player.playerGround.isGrounded)
             player.rb.AddForce(-vel * coefficientOfFriction, ForceMode.Acceleration);
-        
-
     }
-
 
     private void SpeedLimiting()
     {
@@ -126,6 +122,11 @@ public class scr_PlayerMove : scr_PlayerBehaviour
             speed = targetSpeed;
 
         lastTargetSpeed = targetSpeed;
+    }
+
+    public float GetSpeed()
+    {
+        return player.rb.velocity.magnitude;
     }
 
     private IEnumerator SmoothSpeed(float lerpSpeed)

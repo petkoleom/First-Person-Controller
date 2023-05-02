@@ -10,20 +10,27 @@ public class scr_Player : MonoBehaviour
     public scr_PlayerJump playerJump { get; set; }
     public scr_PlayerSprint playerSprint { get; set; }
     public scr_PlayerCrouch playerCrouch { get; set; }
+    public scr_PlayerCamBob playerCamBob { get; set; }
 
 
     public Rigidbody rb { get; set; }
     public Transform orientation { get; set; }
+    public Transform camHolder { get; set; }
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        orientation = transform.GetChild(0);
+        camHolder = transform.root.GetChild(1);
+        rb.freezeRotation = true;
+
         playerLook = GetComponent<scr_PlayerLook>();
         playerGround = GetComponent<scr_PlayerGround>();
         playerMove = GetComponent<scr_PlayerMove>();
         playerJump = GetComponent<scr_PlayerJump>();
         playerSprint = GetComponent<scr_PlayerSprint>();
         playerCrouch = GetComponent<scr_PlayerCrouch>();
+        playerCamBob = camHolder.GetComponent<scr_PlayerCamBob>();
 
         if (playerLook != null)
             playerLook.Initialize(this);
@@ -37,10 +44,10 @@ public class scr_Player : MonoBehaviour
             playerSprint.Initialize(this);
         if (playerCrouch != null)
             playerCrouch.Initialize(this);
+        if(playerCamBob != null)
+            playerCamBob.Initialize(this);
 
-        rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
-        orientation = transform.GetChild(0);
+        
     }
 
     private void Update()

@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(scr_PlayerMove))]
 public class scr_PlayerSprint : scr_PlayerBehaviour
 {
+    [Header("Sprinting")]
     [SerializeField]
     private float sprintSpeed = 13;
 

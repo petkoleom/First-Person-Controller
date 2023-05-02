@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class scr_PlayerLook : scr_PlayerBehaviour
 {
+    [Header("Camera")]
     [SerializeField]
     private float sensitivity = 5;
 

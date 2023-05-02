@@ -4,10 +4,12 @@ using UnityEngine.InputSystem;
 
 public class scr_PlayerCrouch : scr_PlayerBehaviour
 {
+    [Header("Crouching")]
     [SerializeField]
     private float crouchScale;
     [SerializeField]
     private float crouchSpeed;
+    [Header("Sliding")]
     [SerializeField]
     private float slideDuration;
     [SerializeField]
