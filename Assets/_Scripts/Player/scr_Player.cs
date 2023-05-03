@@ -87,7 +87,7 @@ public class scr_Player : MonoBehaviour
                 state = MovementState.Crouching;
                 playerMove.SetTargetSpeed(playerCrouch.GetStateSpeed());
             }
-            else if (playerSprint.sprintingHeld && !playerMove.walkingBack && playerMove.moveDir != Vector3.zero)
+            else if (playerSprint.sprintingHeld && playerMove.walkingForward && playerMove.moveDir != Vector3.zero)
             {
                 state = MovementState.Sprinting;
                 playerMove.SetTargetSpeed(playerSprint.GetStateSpeed());

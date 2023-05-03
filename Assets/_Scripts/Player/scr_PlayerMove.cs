@@ -20,7 +20,7 @@ public class scr_PlayerMove : scr_PlayerBehaviour
     private Vector3 moveInput;
     public Vector3 moveDir { get; set; }
 
-    public bool walkingBack;
+    public bool walkingForward;
     public bool sprintHeld;
 
     private void FixedUpdate()
@@ -41,7 +41,7 @@ public class scr_PlayerMove : scr_PlayerBehaviour
     {
         var dragMod = groundDrag / 10;
         moveDir = player.orientation.forward * moveInput.z + player.orientation.right * moveInput.x;
-        walkingBack = moveInput.z < 0;
+        walkingForward = moveInput.z > 0;
         if (player.playerGround.OnSlope())
             player.rb.AddForce(GetSlopeMoveDir(moveDir) * speed * 10 * dragMod, ForceMode.Acceleration);
         else if (player.playerGround.isGrounded)
