@@ -36,7 +36,7 @@ public class scr_PlayerCamBob : scr_PlayerBehaviour
         {
 
             timer += Time.deltaTime * player.playerMove.GetSpeed() * 1.25f;
-            headBob.transform.localPosition = new Vector3(headBob.transform.localPosition.x, defaultYPos + Mathf.Sin(timer) * (player.state == MovementState.Crouching ? crouchBobAmount : player.state == MovementState.Sprinting ? sprintBobAmount : walkBobAmount), headBob.transform.localPosition.z);
+            headBob.transform.localPosition = new Vector3(headBob.transform.localPosition.x, defaultYPos + Mathf.Sin(timer) * (player.state == PlayerState.Crouching ? crouchBobAmount : player.state == PlayerState.Sprinting ? sprintBobAmount : walkBobAmount), headBob.transform.localPosition.z);
         }
     }
 

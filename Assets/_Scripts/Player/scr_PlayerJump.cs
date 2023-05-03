@@ -9,7 +9,7 @@ public class scr_PlayerJump : scr_PlayerBehaviour
     private float force = 3;
     [SerializeField]
     private float jumpCooldown = .3f;
-
+    
     public bool jumpingHeld;
     private bool readyToJump = true;
 
@@ -29,9 +29,9 @@ public class scr_PlayerJump : scr_PlayerBehaviour
     }
     private void Jump()
     {
-        if (jumpingHeld && player.playerGround.isGrounded && readyToJump && player.state != MovementState.Sliding)
+        if (jumpingHeld && player.playerGround.isGrounded && readyToJump && player.state != PlayerState.Sliding && !player.playerMantle.canMantle)
         {
-            if (player.state == MovementState.Crouching || player.state == MovementState.Prone)
+            if (player.state == PlayerState.Crouching || player.state == PlayerState.Prone)
             {
                 player.ResetStance();
                 readyToJump = false;
@@ -48,9 +48,17 @@ public class scr_PlayerJump : scr_PlayerBehaviour
 
     }
 
+    public void DisableJump(float duration)
+    {
+        readyToJump = false;
+        Invoke(nameof(ResetJump), duration);
+    }
+
     private void ResetJump()
     {
         readyToJump = true;
     }
+
+    
 
 }

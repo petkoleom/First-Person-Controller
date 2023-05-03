@@ -28,7 +28,7 @@ public class scr_PlayerCrouch : scr_PlayerBehaviour
 
     public void OnCrouch(InputValue value)
     {
-        if (player.state == MovementState.Sprinting)
+        if (player.state == PlayerState.Sprinting)
             StartCoroutine(Slide());
         else if (!crouching && player.playerGround.isGrounded)
             Crouch();

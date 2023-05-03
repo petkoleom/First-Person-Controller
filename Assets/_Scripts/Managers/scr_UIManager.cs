@@ -6,7 +6,7 @@ public class scr_UIManager : StaticInstance<scr_UIManager>
     public TMP_Text state;
     public TMP_Text speed;
 
-    public void UpdateState(MovementState state)
+    public void UpdateState(PlayerState state)
     {
         this.state.text = state.ToString();
     }

@@ -106,7 +106,7 @@ public class scr_PlayerController : MonoBehaviour
 
     #region - States -
 
-    public MovementState state { get; private set; }
+    public PlayerState state { get; private set; }
 
     private void StateHandler()
     {
@@ -116,32 +116,32 @@ public class scr_PlayerController : MonoBehaviour
         {
             if (slideHeld && rb.velocity.y <= 0)
             {
-                state = MovementState.Sliding;
+                state = PlayerState.Sliding;
                 targetSpeed = slideSpeed;
             }
             else if (crouchHeld)
             {
-                state = MovementState.Crouching;
+                state = PlayerState.Crouching;
                 targetSpeed = crouchSpeed;
             }
             else if (sprintHeld && !walkingBack && moveDir != Vector3.zero)
             {
-                state = MovementState.Sprinting;
+                state = PlayerState.Sprinting;
                 targetSpeed = sprintSpeed;
             }
             else if (rb.velocity.magnitude > 0)
             {
-                state = MovementState.Walking;
+                state = PlayerState.Walking;
                 targetSpeed = walkSpeed;
             }
             else
             {
-                state = MovementState.Idle;
+                state = PlayerState.Idle;
             }
         }
         else
         {
-            state = MovementState.Air;
+            state = PlayerState.Air;
         }
     }
 
@@ -208,7 +208,7 @@ public class scr_PlayerController : MonoBehaviour
 
     private void SetSpeed()
     {
-        if (state == MovementState.Sliding)
+        if (state == PlayerState.Sliding)
             speed = targetSpeed;
 
         else if (targetSpeed - lastTargetSpeed > 4 && speed > 0)
@@ -270,7 +270,7 @@ public class scr_PlayerController : MonoBehaviour
 
     public void OnJump(InputValue value)
     {
-        if (state == MovementState.Sliding || state == MovementState.Crouching)
+        if (state == PlayerState.Sliding || state == PlayerState.Crouching)
             return;
         /*
         if (state == MovementState.Crouching)
@@ -310,7 +310,7 @@ public class scr_PlayerController : MonoBehaviour
 
     public void OnCrouch(InputValue value)
     {
-        if (state == MovementState.Sprinting)
+        if (state == PlayerState.Sprinting)
             StartCoroutine(Slide());
         else
             Crouch();

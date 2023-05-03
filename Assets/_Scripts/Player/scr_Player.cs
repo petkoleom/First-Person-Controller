@@ -1,6 +1,5 @@
 using System;
-using System.Collections;
-using UnityEditor.Networking.PlayerConnection;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class scr_Player : MonoBehaviour
@@ -10,6 +9,7 @@ public class scr_Player : MonoBehaviour
     public scr_PlayerGround playerGround { get; set; }
     public scr_PlayerMove playerMove { get; set; }
     public scr_PlayerJump playerJump { get; set; }
+    public scr_PlayerMantle playerMantle { get; set; }
     public scr_PlayerSprint playerSprint { get; set; }
     public scr_PlayerCrouch playerCrouch { get; set; }
     public scr_PlayerProne playerProne { get; set; }
@@ -32,6 +32,7 @@ public class scr_Player : MonoBehaviour
         playerGround = GetComponent<scr_PlayerGround>();
         playerMove = GetComponent<scr_PlayerMove>();
         playerJump = GetComponent<scr_PlayerJump>();
+        playerMantle = GetComponent<scr_PlayerMantle>();
         playerSprint = GetComponent<scr_PlayerSprint>();
         playerCrouch = GetComponent<scr_PlayerCrouch>();
         playerProne = GetComponent<scr_PlayerProne>();
@@ -46,6 +47,8 @@ public class scr_Player : MonoBehaviour
             playerMove.Initialize(this);
         if (playerJump != null)
             playerJump.Initialize(this);
+        if(playerMantle != null)
+            playerMantle.Initialize(this);
         if (playerSprint != null)
             playerSprint.Initialize(this);
         if (playerCrouch != null)
@@ -67,7 +70,7 @@ public class scr_Player : MonoBehaviour
 
     #region - States -
 
-    public MovementState state { get; set; }
+    public PlayerState state { get; set; }
 
     private void StateHandler()
     {
@@ -78,37 +81,37 @@ public class scr_Player : MonoBehaviour
         {
             if (playerProne.prone)
             {
-                state = MovementState.Prone;
+                state = PlayerState.Prone;
                 playerMove.SetTargetSpeed(playerProne.GetStateSpeed());
             }
             else if (playerCrouch.sliding)
             {
-                state = MovementState.Sliding;
+                state = PlayerState.Sliding;
                 playerMove.SetTargetSpeed(playerCrouch.GetStateSpeed2());
             }
             else if (playerCrouch.crouching)
             {
-                state = MovementState.Crouching;
+                state = PlayerState.Crouching;
                 playerMove.SetTargetSpeed(playerCrouch.GetStateSpeed());
             }
             else if (playerSprint.sprintingHeld && playerMove.walkingForward && playerMove.moveDir != Vector3.zero)
             {
-                state = MovementState.Sprinting;
+                state = PlayerState.Sprinting;
                 playerMove.SetTargetSpeed(playerSprint.GetStateSpeed());
             }
             else if (rb.velocity.magnitude > .01f)
             {
-                state = MovementState.Walking;
+                state = PlayerState.Walking;
                 playerMove.SetTargetSpeed(playerMove.GetStateSpeed());
             }
             else
             {
-                state = MovementState.Idle;
+                state = PlayerState.Idle;
             }
         }
         else
         {
-            state = MovementState.Air;
+            state = PlayerState.Air;
         }
     }
 
@@ -123,7 +126,7 @@ public class scr_Player : MonoBehaviour
 }
 
 [Serializable]
-public enum MovementState
+public enum PlayerState
 {
     Idle,
     Walking,

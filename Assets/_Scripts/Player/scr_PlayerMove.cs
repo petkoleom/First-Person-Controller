@@ -21,7 +21,6 @@ public class scr_PlayerMove : scr_PlayerBehaviour
     public Vector3 moveDir { get; set; }
 
     public bool walkingForward;
-    public bool sprintHeld;
 
     private void FixedUpdate()
     {
@@ -107,7 +106,7 @@ public class scr_PlayerMove : scr_PlayerBehaviour
 
     private void SetSpeed()
     {
-        if (player.state == MovementState.Sliding)
+        if (player.state == PlayerState.Sliding)
             speed = targetSpeed;
 
         else if (targetSpeed - lastTargetSpeed > 4 && speed > 0)
