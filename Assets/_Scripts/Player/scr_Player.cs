@@ -14,6 +14,7 @@ public class scr_Player : MonoBehaviour
     public scr_PlayerCrouch playerCrouch { get; set; }
     public scr_PlayerProne playerProne { get; set; }
     public scr_PlayerCamBob playerCamBob { get; set; }
+    public scr_PlayerHealth playerHealth { get; set; }
 
 
     public Rigidbody rb { get; set; }
@@ -35,6 +36,7 @@ public class scr_Player : MonoBehaviour
         playerCrouch = GetComponent<scr_PlayerCrouch>();
         playerProne = GetComponent<scr_PlayerProne>();
         playerCamBob = camHolder.GetComponent<scr_PlayerCamBob>();
+        playerHealth = GetComponent<scr_PlayerHealth>();
 
         if (playerLook != null)
             playerLook.Initialize(this);
@@ -52,6 +54,8 @@ public class scr_Player : MonoBehaviour
             playerProne.Initialize(this);
         if(playerCamBob != null)
             playerCamBob.Initialize(this);
+        if( playerHealth != null)   
+            playerHealth.Initialize(this);
 
         
     }

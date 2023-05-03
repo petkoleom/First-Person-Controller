@@ -327,6 +327,7 @@ GameObject:
   - component: {fileID: 1700939416}
   - component: {fileID: 1700939427}
   - component: {fileID: 1993855609}
+  - component: {fileID: 1993855610}
   m_Layer: 0
   m_Name: First Person Player
   m_TagString: Player
@@ -458,7 +459,7 @@ MonoBehaviour:
   walkSpeed: 8
   groundDrag: 12
   airMultiplier: 0.3
-  walkingBack: 0
+  walkingForward: 0
   sprintHeld: 0
 --- !u!114 &1700939415
 MonoBehaviour:
@@ -526,6 +527,20 @@ MonoBehaviour:
   proneScale: 0.5
   proneSpeed: 2
   prone: 0
+--- !u!114 &1993855610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4555868792539503088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b471f6148b49614e968bcabf6e0b3d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  health: 100
 --- !u!1 &4749819371610545813
 GameObject:
   m_ObjectHideFlags: 0
