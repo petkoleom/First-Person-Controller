@@ -16,8 +16,6 @@ public class scr_PlayerCrouch : scr_PlayerBehaviour
     private float slideSpeed;
 
     private Vector3 originalScale;
-    private Transform camPos;
-
     public bool crouching;
     public bool sliding;
 
@@ -25,7 +23,6 @@ public class scr_PlayerCrouch : scr_PlayerBehaviour
     private void Start()
     {
         originalScale = transform.localScale;
-        camPos = transform.GetChild(2);
         crouching = false;
     }
 
@@ -34,17 +31,14 @@ public class scr_PlayerCrouch : scr_PlayerBehaviour
         if (player.state == MovementState.Sprinting)
             StartCoroutine(Slide());
         else if (!crouching && player.playerGround.isGrounded)
-        {
             Crouch();
-        }
         else
-        {
             StandUp();
-        }
     }
 
     public void Crouch()
     {
+        player.ResetStance();
         crouching = true;
         transform.localScale = new Vector3(1, crouchScale, 1);
 

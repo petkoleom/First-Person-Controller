@@ -31,9 +31,9 @@ public class scr_PlayerJump : scr_PlayerBehaviour
     {
         if (jumpingHeld && player.playerGround.isGrounded && readyToJump && player.state != MovementState.Sliding)
         {
-            if (player.state == MovementState.Crouching)
+            if (player.state == MovementState.Crouching || player.state == MovementState.Prone)
             {
-                player.playerCrouch.StandUp();
+                player.ResetStance();
                 readyToJump = false;
                 Invoke(nameof(ResetJump), jumpCooldown);
             }

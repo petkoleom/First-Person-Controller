@@ -6,11 +6,11 @@ using UnityEngine;
 public class scr_PlayerCamBob : scr_PlayerBehaviour
 {
     [SerializeField]
-    private float walkBobAmount = .5f;
+    private float walkBobAmount = .035f;
     [SerializeField]
-    private float sprintBobAmount = 1f;
+    private float sprintBobAmount = .07f;
     [SerializeField]
-    private float crouchBobAmount = .2f;
+    private float crouchBobAmount = .015f;
 
     private float defaultYPos = 0;
     private float timer;
@@ -35,9 +35,8 @@ public class scr_PlayerCamBob : scr_PlayerBehaviour
         if(player.playerMove.GetSpeed() > .1f)
         {
 
-            timer += Time.deltaTime * player.playerMove.GetSpeed();
-            print(Mathf.Sin(timer));
-            headBob.transform.localPosition = new Vector3(headBob.transform.localPosition.x, defaultYPos + Mathf.Sin(timer) * walkBobAmount, headBob.transform.localPosition.z);
+            timer += Time.deltaTime * player.playerMove.GetSpeed() * 1.25f;
+            headBob.transform.localPosition = new Vector3(headBob.transform.localPosition.x, defaultYPos + Mathf.Sin(timer) * (player.state == MovementState.Crouching ? crouchBobAmount : player.state == MovementState.Sprinting ? sprintBobAmount : walkBobAmount), headBob.transform.localPosition.z);
         }
     }
 

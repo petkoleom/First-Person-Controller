@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
 
 public class scr_Player : MonoBehaviour
@@ -10,6 +12,7 @@ public class scr_Player : MonoBehaviour
     public scr_PlayerJump playerJump { get; set; }
     public scr_PlayerSprint playerSprint { get; set; }
     public scr_PlayerCrouch playerCrouch { get; set; }
+    public scr_PlayerProne playerProne { get; set; }
     public scr_PlayerCamBob playerCamBob { get; set; }
 
 
@@ -30,6 +33,7 @@ public class scr_Player : MonoBehaviour
         playerJump = GetComponent<scr_PlayerJump>();
         playerSprint = GetComponent<scr_PlayerSprint>();
         playerCrouch = GetComponent<scr_PlayerCrouch>();
+        playerProne = GetComponent<scr_PlayerProne>();
         playerCamBob = camHolder.GetComponent<scr_PlayerCamBob>();
 
         if (playerLook != null)
@@ -44,6 +48,8 @@ public class scr_Player : MonoBehaviour
             playerSprint.Initialize(this);
         if (playerCrouch != null)
             playerCrouch.Initialize(this);
+        if (playerProne != null)
+            playerProne.Initialize(this);
         if(playerCamBob != null)
             playerCamBob.Initialize(this);
 
@@ -66,7 +72,12 @@ public class scr_Player : MonoBehaviour
 
         if (playerGround.isGrounded)
         {
-            if (playerCrouch.sliding)
+            if (playerProne.prone)
+            {
+                state = MovementState.Prone;
+                playerMove.SetTargetSpeed(playerProne.GetStateSpeed());
+            }
+            else if (playerCrouch.sliding)
             {
                 state = MovementState.Sliding;
                 playerMove.SetTargetSpeed(playerCrouch.GetStateSpeed2());
@@ -97,6 +108,13 @@ public class scr_Player : MonoBehaviour
         }
     }
 
+    public void ResetStance()
+    {
+        playerCrouch.StandUp();
+        playerProne.StandUp();
+    }
+
+
     #endregion
 }
 
@@ -107,6 +125,7 @@ public enum MovementState
     Walking,
     Sprinting,
     Crouching,
+    Prone,
     Sliding,
     Air
 }
