@@ -10,6 +10,8 @@ public class scr_PlayerMantle : scr_PlayerBehaviour
     private Vector3 ledgeDetectionOffset = new Vector3(0, 2.5f, 0);
     [SerializeField]
     private float ledgeDetectionDistance = 1;
+    [SerializeField]
+    private float mantleSpeed = 2;
 
     public bool canMantle;
 
@@ -24,13 +26,13 @@ public class scr_PlayerMantle : scr_PlayerBehaviour
         if (canMantle)
         {
             player.playerJump.DisableJump(.2f);
-            Mantle(GetObstacleHeight());
-            
+            StartCoroutine(Mantle(GetObstacleHeight()));
         }
     }
 
     private void LedgeDetection()
     {
+        if (!player.playerGround.isGrounded) return;
         RaycastHit ledgeCheckHit;
         RaycastHit obstacleHit;
         if (Physics.Raycast(transform.localPosition + Vector3.up * 1.8f, player.orientation.forward, out obstacleHit, ledgeDetectionDistance, player.playerGround.ground))
@@ -38,7 +40,7 @@ public class scr_PlayerMantle : scr_PlayerBehaviour
             if (!Physics.Raycast(transform.localPosition + ledgeDetectionOffset, player.orientation.forward, out ledgeCheckHit, ledgeDetectionDistance, player.playerGround.ground))
             {
                 canMantle = true;
-                print(GetObstacleHeight());
+                //print(GetObstacleHeight());
             }
             else
                 canMantle = false;
@@ -52,14 +54,18 @@ public class scr_PlayerMantle : scr_PlayerBehaviour
         float currentPlayerHeight = transform.localPosition.y;
         RaycastHit heightCheck;
         Vector3 origin = transform.localPosition + ledgeDetectionOffset + player.orientation.forward * ledgeDetectionDistance;
-        Physics.Raycast(origin, Vector3.down, out heightCheck, .5f, player.playerGround.ground);
-        print(heightCheck.point.y);
+        Physics.Raycast(origin, Vector3.down, out heightCheck, 1, player.playerGround.ground);
         return heightCheck.point.y - currentPlayerHeight;
     }
 
-    private void Mantle(float height)
+    private IEnumerator Mantle(float height)
     {
-        transform.localPosition = new Vector3(transform.localPosition.x, height + .1f, transform.localPosition.z) + player.orientation.forward;
+        player.rb.AddForce(Vector3.up * mantleSpeed, ForceMode.Impulse);
+        yield return new WaitForSeconds(.25f);
+        player.rb.AddForce(player.orientation.forward * mantleSpeed * .2f, ForceMode.Impulse);
+
     }
+
+
 
 }

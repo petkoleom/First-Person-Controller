@@ -22,8 +22,11 @@ public class scr_PlayerMove : scr_PlayerBehaviour
 
     public bool walkingForward;
 
+    private bool movementEnabled = true;
+
     private void FixedUpdate()
     {
+        if (!movementEnabled) return;
         Move();
         //DragControl();
         SpeedLimiting();
@@ -150,6 +153,11 @@ public class scr_PlayerMove : scr_PlayerBehaviour
     public float GetStateSpeed()
     {
         return walkSpeed;
+    }
+
+    public void SetMovement(bool value)
+    {
+        movementEnabled = value;
     }
 
 
