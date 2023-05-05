@@ -1026,7 +1026,7 @@ GameObject:
   - component: {fileID: 346774070}
   - component: {fileID: 346774069}
   - component: {fileID: 346774068}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4332,11 +4332,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 605258834770277735, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
-      propertyPath: mantleSpeed
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 605258834770277735, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
-      propertyPath: ledgeDetectionOffset.y
+      propertyPath: maxLedgeHeight.y
       value: 2.6
       objectReference: {fileID: 0}
     - target: {fileID: 4555868792055335536, guid: 2e9eed4494e5e914d8cb86db149aa951, type: 3}
@@ -8024,7 +8020,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 92004626}
 --- !u!33 &1892049922
@@ -8637,7 +8633,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 270911143}
 --- !u!33 &2075096585

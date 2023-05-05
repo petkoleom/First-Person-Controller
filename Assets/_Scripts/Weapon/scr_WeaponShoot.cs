@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class scr_WeaponShoot : scr_WeaponBehaviour
@@ -9,6 +10,8 @@ public class scr_WeaponShoot : scr_WeaponBehaviour
         Auto
     }
     public FireMode fireMode;
+
+    private RaycastHit hit;
 
     public bool shootHeld;
 
@@ -41,11 +44,11 @@ public class scr_WeaponShoot : scr_WeaponBehaviour
 
     public void Shoot()
     {
-        print("shoot");
+        var shot = Physics.Raycast(transform.parent.position, transform.parent.forward, out hit);
+        if (shot)
+        {
+            print(hit.collider.name);
+        }
     }
 
-    public void StopShooting()
-    {
-
-    }
 }

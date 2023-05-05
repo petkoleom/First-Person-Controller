@@ -653,7 +653,6 @@ MonoBehaviour:
   groundDrag: 12
   airMultiplier: 0.3
   walkingForward: 0
-  sprintHeld: 0
 --- !u!114 &1700939415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -733,7 +732,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  ledgeDetectionOffset: {x: 0, y: 2.5, z: 0}
+  ledgeDetectionOffset: {x: 0, y: 2.6, z: 0}
+  ledgeDetectionDistance: 1
+  mantleSpeed: 10
   canMantle: 0
 --- !u!1 &4749819371610545813
 GameObject:
