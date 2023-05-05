@@ -56,12 +56,26 @@ public class scr_PlayerMantle : scr_PlayerBehaviour
     private float GetObstacleHeight()
     {
         float currentPlayerHeight = transform.localPosition.y;
+        float[] points = new float[3];
+
         RaycastHit heightCheck;
-        Vector3 origin = transform.localPosition + maxLedgeHeight + player.orientation.forward * ledgeDetectionDistance;
-        Physics.Raycast(origin, Vector3.down, out heightCheck, 2.5f, player.playerGround.ground);
+        Vector3 origin = transform.localPosition + maxLedgeHeight;
+
+        for (int i = 1; i < 4; i++)
+        {
+            Physics.Raycast(origin + player.orientation.forward * (i * .3f), Vector3.down, out heightCheck, 2.5f, player.playerGround.ground);
+            points[i - 1] = heightCheck.point.y;
+        }
+
+        float height = 0;
+        foreach (var point in points)
+        {
+            if(point > height)
+                height = point;
+        }
 
 
-        return heightCheck.point.y - currentPlayerHeight;
+        return height - currentPlayerHeight;
     }
 
     private IEnumerator Mantle(float height)
