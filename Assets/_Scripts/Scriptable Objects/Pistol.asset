@@ -12,12 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a3d05d16c6d8894d907eb0e9cc0fa1a, type: 3}
   m_Name: Pistol
   m_EditorClassIdentifier: 
-  weapon: {fileID: 792927488420783933, guid: 35e7b0abe2132234fb0cc2138bbf0546, type: 3}
+  weaponName: Pistol
+  weaponPrefab: {fileID: 792927488420783933, guid: 35e7b0abe2132234fb0cc2138bbf0546, type: 3}
   fireRate: 360
   damage: 30
-  magSize: 12
-  ammoReserve: 60
-  ammoInMag: 6
-  ammoInReserve: 5
-  reloadSpeed: 0.5
   fireMode: 0
+  magSize: 12
+  ammoReserve: 480
+  ammoInMag: 9
+  ammoInReserve: 60
+  reloadSpeed: 0.5
+  horizontalRecoil: 40
+  verticalRecoil: 3
+  kickback: 0.15
+  visualRecoil: {x: -10, y: 10, z: 10}

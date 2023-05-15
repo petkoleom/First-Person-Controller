@@ -12,15 +12,7 @@ public class scr_PlayerSprint : scr_PlayerBehaviour
 
     public void OnSprint(InputValue value)
     {
-        if (!sprintingHeld)
-        {
-            sprintingHeld = true;
-           
-        }
-        else
-        {
-            sprintingHeld = false;
-        }
+        sprintingHeld = value.isPressed;
     }
 
     public float GetStateSpeed()

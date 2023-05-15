@@ -7,31 +7,45 @@ public class scr_Weapon : MonoBehaviour
     public sco_WeaponData data;
 
     public sco_WeaponData[] loadout = new sco_WeaponData[2];
-    public int currentWeapon = 0;
+    private int currentWeapon = 0;
 
     private Transform currentWeaponChild;
 
     public scr_WeaponShoot weaponShoot { get; set; }
     public scr_WeaponReload weaponReload { get; set; }
+    public scr_WeaponRecoil weaponRecoil { get; set; }
 
     private void Awake()
     {
+        foreach (var item in loadout)
+        {
+            Instantiate(item.weaponPrefab, transform);
+        }
+
+
         currentWeaponChild = transform.GetChild(currentWeapon);
 
         Initialize();
 
 
         EnableWeapon();
+
     }
 
     private void Initialize()
     {
         weaponShoot = currentWeaponChild.GetComponent<scr_WeaponShoot>();
         weaponReload = currentWeaponChild.GetComponent<scr_WeaponReload>();
+        weaponRecoil = GetComponent<scr_WeaponRecoil>();
 
 
         if (weaponShoot != null) weaponShoot.Initialize(this);
         if (weaponReload != null) weaponReload.Initialize(this);
+        if (weaponRecoil != null)
+        {
+            weaponRecoil.Initialize(this);
+            weaponRecoil.Initialize();
+        }
 
     }
 
@@ -50,7 +64,7 @@ public class scr_Weapon : MonoBehaviour
         {
             state = WeaponState.Shooting;
         }
-        else if(weaponReload.reloading)
+        else if (weaponReload.reloading)
         {
             state = WeaponState.Reloading;
         }
@@ -79,13 +93,24 @@ public class scr_Weapon : MonoBehaviour
 
     private void SwitchWeapon()
     {
-        currentWeapon = currentWeapon == 0 ? 1 : 0;
+
+        StopAllCoroutines();
+        weaponReload.CancelReload();
+        weaponShoot.ResetShooting();
+        currentWeapon = 1 - currentWeapon;
         currentWeaponChild = transform.GetChild(currentWeapon);
         data = loadout[currentWeapon];
+
+
         EnableWeapon();
         Initialize();
         scr_UIManager.Instance.UpdateAmmo(data.ammoInMag.ToString() + " / " + data.ammoInReserve.ToString());
 
+    }
+
+    public Transform GetCurrentWeapon()
+    {
+        return currentWeaponChild;
     }
 
     #endregion

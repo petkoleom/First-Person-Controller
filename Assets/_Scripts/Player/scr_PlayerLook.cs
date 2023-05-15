@@ -1,3 +1,5 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,9 +9,10 @@ public class scr_PlayerLook : scr_PlayerBehaviour
     [SerializeField]
     private float sensitivity = 5;
 
-    private Transform camHolder;
+    public Transform camHolder;
 
-    private float mouseX, mouseY, xRot, yRot;
+    private float mouseX, mouseY;
+    public float xRot, yRot;
 
     private void Start()
     {
@@ -39,4 +42,5 @@ public class scr_PlayerLook : scr_PlayerBehaviour
         mouseX = value.Get<Vector2>().x * sensitivity * Time.fixedDeltaTime;
         mouseY = value.Get<Vector2>().y * sensitivity * Time.fixedDeltaTime;
     }
+
 }

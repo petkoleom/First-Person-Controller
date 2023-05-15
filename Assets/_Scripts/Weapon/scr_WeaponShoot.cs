@@ -12,21 +12,22 @@ public class scr_WeaponShoot : scr_WeaponBehaviour
 
     public bool shooting;
 
+    public GameObject bulletHole;
+
     private void Start()
     {
-        shootHeld = false;
         allowFire = true;
 
         //ammo
         weapon.data.ammoInMag = weapon.data.magSize;
         weapon.data.ammoInReserve = weapon.data.ammoReserve;
         scr_UIManager.Instance.UpdateAmmo(weapon.data.ammoInMag.ToString() + " / " + weapon.data.ammoInReserve.ToString());
+
     }
 
-    
     private void Update()
     {
-        if(weapon.data.fireMode == FireMode.Auto && shootHeld && canShoot)
+        if (weapon.data.fireMode == FireMode.Auto && shootHeld && canShoot)
         {
             StartCoroutine(Shoot());
         }
@@ -34,33 +35,21 @@ public class scr_WeaponShoot : scr_WeaponBehaviour
 
     public void OnShoot(InputValue value)
     {
-        if (!shootHeld && canShoot)
-        {
-            shootHeld = true;
+        shootHeld = value.isPressed;
+        if (canShoot && value.isPressed)
             StartCoroutine(Shoot());
-        }
-        else
-        {
-            shootHeld = false;
-        }
     }
 
     public IEnumerator Shoot()
     {
         shooting = true;
         allowFire = false;
-        var shot = Physics.Raycast(transform.parent.position, transform.parent.forward, out hit);
-        if (shot)
-        {
-            var target = hit.transform.GetComponent<itf_Damageable>();
-            if(target != null)
-            {
-                target.TakeDamage(weapon.data.damage);
-                
-            }
-            
-        }
+
+        RaycastShot();
+        
         weapon.data.ammoInMag--;
+
+        weapon.weaponRecoil.Recoil();
 
         scr_UIManager.Instance.UpdateAmmo(weapon.data.ammoInMag.ToString() + " / " + weapon.data.ammoInReserve.ToString());
 
@@ -75,6 +64,31 @@ public class scr_WeaponShoot : scr_WeaponBehaviour
             StartCoroutine(weapon.weaponReload.Reload());
         }
 
+    }
+
+    private void RaycastShot()
+    {
+        var shot = Physics.Raycast(transform.parent.position, transform.parent.forward, out hit);
+        if (shot)
+        {
+            GameObject bh = Instantiate(bulletHole, hit.point + hit.normal * 0.001f, Quaternion.identity);
+            bh.transform.LookAt(hit.point + hit.normal);
+            bh.transform.parent = hit.transform;
+            Destroy(bh, 15);
+            var target = hit.transform.GetComponent<itf_Damageable>();
+            if (target != null)
+            {
+                target.TakeDamage(weapon.data.damage);
+
+            }
+
+        }
+    }
+
+    public void ResetShooting()
+    {
+        shootHeld = false;
+        allowFire = true;
     }
 
     private bool canShoot { get { return allowFire && weapon.data.ammoInMag > 0 && weapon.state != WeaponState.Reloading; } }

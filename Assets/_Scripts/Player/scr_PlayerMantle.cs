@@ -80,14 +80,16 @@ public class scr_PlayerMantle : scr_PlayerBehaviour
 
     private IEnumerator Mantle(float height)
     {
-        if(height < 1.5f)
+        Vector3 forward = player.orientation.forward;
+
+        if (height < 1.5f)
             player.rb.AddForce(Vector3.up * mantleSpeed * height * 1.4f, ForceMode.VelocityChange);
         else if(height > 2.2f)
             player.rb.AddForce(Vector3.up * mantleSpeed * height * .8f, ForceMode.VelocityChange);
         else
             player.rb.AddForce(Vector3.up * mantleSpeed * height * .9f, ForceMode.VelocityChange);
         yield return new WaitForSeconds(.17f);
-        player.rb.AddForce(player.orientation.forward * mantleSpeed * .3f, ForceMode.VelocityChange);
+        player.rb.AddForce(forward * mantleSpeed * .3f, ForceMode.VelocityChange);
 
     }
 

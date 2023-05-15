@@ -25,7 +25,8 @@ public class scr_PlayerJump : scr_PlayerBehaviour
 
     public void OnJump(InputValue value)
     {
-        jumpingHeld = !jumpingHeld;
+        //jumpingHeld = !jumpingHeld;
+        jumpingHeld = value.isPressed;
     }
     private void Jump()
     {

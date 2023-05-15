@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(scr_WeaponShoot))]
 public class scr_WeaponReload : scr_WeaponBehaviour
 {
     public bool reloading;
@@ -33,5 +34,10 @@ public class scr_WeaponReload : scr_WeaponBehaviour
         reloading = false;
         scr_UIManager.Instance.UpdateAmmo(weapon.data.ammoInMag.ToString() + " / " + weapon.data.ammoInReserve.ToString());
 
+    }
+
+    public void CancelReload()
+    {
+        reloading = false;
     }
 }
