@@ -13,6 +13,7 @@ public class scr_Player : MonoBehaviour
     public scr_PlayerProne playerProne { get; set; }
     public scr_PlayerCamBob playerCamBob { get; set; }
     public scr_PlayerHealth playerHealth { get; set; }
+    public scr_PlayerClimb playerClimb { get; set; }
 
 
     public Rigidbody rb { get; set; }
@@ -36,6 +37,7 @@ public class scr_Player : MonoBehaviour
         playerProne = GetComponent<scr_PlayerProne>();
         playerCamBob = camHolder.GetComponent<scr_PlayerCamBob>();
         playerHealth = GetComponent<scr_PlayerHealth>();
+        playerClimb = GetComponent<scr_PlayerClimb>();
 
         if (playerLook != null) playerLook.Initialize(this);
         if (playerGround != null) playerGround.Initialize(this);
@@ -47,6 +49,7 @@ public class scr_Player : MonoBehaviour
         if (playerProne != null) playerProne.Initialize(this);
         if (playerCamBob != null) playerCamBob.Initialize(this);
         if (playerHealth != null) playerHealth.Initialize(this);
+        if(playerClimb != null) playerClimb.Initialize(this);
 
 
     }
@@ -64,9 +67,14 @@ public class scr_Player : MonoBehaviour
     {
         scr_UIManager.Instance.UpdateState(state);
 
-
-        if (playerGround.isGrounded)
+        if (playerClimb.isClimbing)
         {
+            state = PlayerState.Climbing;
+            playerMove.SetMovement(false);
+        }
+        else if (playerGround.isGrounded)
+        {
+            playerMove.SetMovement(true);
             if (playerProne.prone)
             {
                 state = PlayerState.Prone;
@@ -99,6 +107,7 @@ public class scr_Player : MonoBehaviour
         }
         else
         {
+            playerMove.SetMovement(true);
             state = PlayerState.Air;
         }
     }
@@ -122,5 +131,6 @@ public enum PlayerState
     Crouching,
     Prone,
     Sliding,
+    Climbing,
     Air
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class scr_Target : MonoBehaviour, itf_Damageable
+public class scr_Target : MonoBehaviour, itf_Damage
 {
     private float health = 100;
 

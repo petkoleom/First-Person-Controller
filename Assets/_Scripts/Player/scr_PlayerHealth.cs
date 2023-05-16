@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class scr_PlayerHealth : scr_PlayerBehaviour, itf_Damageable
+public class scr_PlayerHealth : scr_PlayerBehaviour, itf_Damage
 {
     [SerializeField]
     private float health;

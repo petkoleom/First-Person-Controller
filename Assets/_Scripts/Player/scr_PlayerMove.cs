@@ -26,12 +26,14 @@ public class scr_PlayerMove : scr_PlayerBehaviour
 
     private void FixedUpdate()
     {
-        if (!movementEnabled) return;
-        Move();
-        //DragControl();
+
+
+        if (movementEnabled)
+            Move();
+
+        CounterMovement();
         SpeedLimiting();
         SetSpeed();
-        CounterMovement();
     }
 
     public void OnMove(InputValue value)
@@ -61,7 +63,8 @@ public class scr_PlayerMove : scr_PlayerBehaviour
 
     void CounterMovement()
     {
-        player.rb.useGravity = !player.playerGround.OnSlope();
+        if (player.state != PlayerState.Climbing)
+            player.rb.useGravity = !player.playerGround.OnSlope();
 
         Vector3 vel = player.rb.velocity;
 
@@ -88,8 +91,8 @@ public class scr_PlayerMove : scr_PlayerBehaviour
                 Vector3 limitedVel = flatVel.normalized * speed;
                 player.rb.velocity = new Vector3(limitedVel.x, player.rb.velocity.y, limitedVel.z);
             }
-        } 
-        else if(speed > walkSpeed)
+        }
+        else if (speed > walkSpeed)
         {
             if (flatVel.magnitude > speed * .8f)
             {

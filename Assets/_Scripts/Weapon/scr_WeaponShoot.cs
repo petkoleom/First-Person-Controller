@@ -36,7 +36,7 @@ public class scr_WeaponShoot : scr_WeaponBehaviour
     public void OnShoot(InputValue value)
     {
         shootHeld = value.isPressed;
-        if (canShoot && value.isPressed)
+        if (canShoot && shootHeld)
             StartCoroutine(Shoot());
     }
 
@@ -75,13 +75,12 @@ public class scr_WeaponShoot : scr_WeaponBehaviour
             bh.transform.LookAt(hit.point + hit.normal);
             bh.transform.parent = hit.transform;
             Destroy(bh, 15);
-            var target = hit.transform.GetComponent<itf_Damageable>();
+            var target = hit.transform.GetComponent<itf_Damage>();
             if (target != null)
             {
                 target.TakeDamage(weapon.data.damage);
 
             }
-
         }
     }
 
