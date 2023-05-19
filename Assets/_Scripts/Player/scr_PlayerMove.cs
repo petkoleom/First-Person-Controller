@@ -134,6 +134,11 @@ public class scr_PlayerMove : scr_PlayerBehaviour
         return player.rb.velocity.magnitude;
     }
 
+    public float GetTargetSpeed()
+    {
+        return targetSpeed;
+    }
+
     private IEnumerator SmoothSpeed(float lerpSpeed)
     {
         float time = 0;

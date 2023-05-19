@@ -19,8 +19,6 @@ public class scr_PlayerClimb : scr_PlayerBehaviour
     {
         player.rb.useGravity = !isClimbing;
 
-        print(HitClimbable());
-
         Climb();
 
         DismountAtTop();
@@ -80,7 +78,6 @@ public class scr_PlayerClimb : scr_PlayerBehaviour
         if (wasClimbing && !isClimbing && !player.playerGround.isGrounded)
         {
             player.rb.AddForce(player.orientation.forward * 2, ForceMode.Impulse);
-            print("dismount");
         }
         wasClimbing = isClimbing;
     }

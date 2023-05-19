@@ -16,13 +16,15 @@ MonoBehaviour:
   weaponPrefab: {fileID: 792927488420783933, guid: 35e7b0abe2132234fb0cc2138bbf0546, type: 3}
   fireRate: 360
   damage: 30
+  spread: 20
   fireMode: 0
   magSize: 12
   ammoReserve: 480
-  ammoInMag: 9
-  ammoInReserve: 60
+  ammoInMag: 12
+  ammoInReserve: 480
   reloadSpeed: 0.5
   horizontalRecoil: 40
   verticalRecoil: 3
   kickback: 0.15
   visualRecoil: {x: -10, y: 10, z: 10}
+  adsSpeed: 0.02

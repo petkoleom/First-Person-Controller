@@ -32,8 +32,8 @@ public class scr_WeaponSway : scr_WeaponBehaviour
 
     private void UpdateSway()
     {
-        Quaternion xAdj = Quaternion.AngleAxis(intensity * x, Vector3.up);
-        Quaternion yAdj = Quaternion.AngleAxis(-intensity * y, Vector3.right);
+        Quaternion xAdj = Quaternion.AngleAxis(-(weapon.state == WeaponState.ADS ? intensity * .1f : intensity) * x, Vector3.up);
+        Quaternion yAdj = Quaternion.AngleAxis((weapon.state == WeaponState.ADS ? intensity * .1f : intensity) * y, Vector3.right);
         Quaternion targetRot = originRot * xAdj * yAdj;
 
         transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRot, Time.deltaTime * smooth);

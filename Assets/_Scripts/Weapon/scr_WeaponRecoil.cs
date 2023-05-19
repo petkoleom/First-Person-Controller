@@ -31,13 +31,13 @@ public class scr_WeaponRecoil : scr_WeaponBehaviour
         targetRot = Vector3.Lerp(targetRot, Vector3.zero, Time.deltaTime * returnAmount);
         currentRot = Vector3.Slerp(currentRot, targetRot, Time.fixedDeltaTime * snapiness);
         currentWeapon.transform.localRotation = Quaternion.Euler(currentRot);
-        Kickback();
+        CalculateKickback();
 
 
 
     }
 
-    private void Kickback()
+    private void CalculateKickback()
     {
         targetPos = Vector3.Lerp(targetPos, originPos, Time.deltaTime * returnAmount);
         currentPos = Vector3.Lerp(currentPos, targetPos, Time.fixedDeltaTime * snapiness);

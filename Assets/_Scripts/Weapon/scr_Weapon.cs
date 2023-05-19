@@ -13,7 +13,10 @@ public class scr_Weapon : MonoBehaviour
 
     public scr_WeaponShoot weaponShoot { get; set; }
     public scr_WeaponReload weaponReload { get; set; }
+    public scr_WeaponAim weaponAim { get; set; }
     public scr_WeaponRecoil weaponRecoil { get; set; }
+    public scr_WeaponSway weaponSway { get; set; }
+    public scr_WeaponBob weaponBob { get; set; }
 
     private void Awake()
     {
@@ -36,11 +39,17 @@ public class scr_Weapon : MonoBehaviour
     {
         weaponShoot = currentWeaponChild.GetComponent<scr_WeaponShoot>();
         weaponReload = currentWeaponChild.GetComponent<scr_WeaponReload>();
+        weaponAim = currentWeaponChild.GetComponent<scr_WeaponAim>();
         weaponRecoil = GetComponent<scr_WeaponRecoil>();
+        weaponSway = GetComponent<scr_WeaponSway>();
+        weaponBob = GetComponent<scr_WeaponBob>();
 
 
         if (weaponShoot != null) weaponShoot.Initialize(this);
         if (weaponReload != null) weaponReload.Initialize(this);
+        if (weaponAim != null) weaponAim.Initialize(this);
+        if(weaponSway != null) weaponSway.Initialize(this);
+        if(weaponBob != null) weaponBob.Initialize(this);
         if (weaponRecoil != null)
         {
             weaponRecoil.Initialize(this);
@@ -60,13 +69,13 @@ public class scr_Weapon : MonoBehaviour
 
     private void StateHandler()
     {
-        if (weaponShoot.shooting)
-        {
-            state = WeaponState.Shooting;
-        }
-        else if (weaponReload.reloading)
+        if (weaponReload.reloading)
         {
             state = WeaponState.Reloading;
+        }
+        else if (weaponAim.isADS)
+        {
+            state = WeaponState.ADS;
         }
         else
         {
@@ -86,7 +95,7 @@ public class scr_Weapon : MonoBehaviour
         currentWeaponChild.gameObject.SetActive(true);
     }
 
-    public void OnSwitchWeapon(InputValue value)
+    public void OnSwitch(InputValue value)
     {
         SwitchWeapon();
     }
@@ -97,6 +106,7 @@ public class scr_Weapon : MonoBehaviour
         StopAllCoroutines();
         weaponReload.CancelReload();
         weaponShoot.ResetShooting();
+        weaponAim.ResetADS();
         currentWeapon = 1 - currentWeapon;
         currentWeaponChild = transform.GetChild(currentWeapon);
         data = loadout[currentWeapon];
@@ -122,7 +132,6 @@ public enum WeaponState
 {
     Idle,
     Moving,
-    Shooting,
-    Aiming,
+    ADS,
     Reloading
 }

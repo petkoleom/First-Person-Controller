@@ -49,7 +49,7 @@ public class scr_Player : MonoBehaviour
         if (playerProne != null) playerProne.Initialize(this);
         if (playerCamBob != null) playerCamBob.Initialize(this);
         if (playerHealth != null) playerHealth.Initialize(this);
-        if(playerClimb != null) playerClimb.Initialize(this);
+        if (playerClimb != null) playerClimb.Initialize(this);
 
 
     }
@@ -62,10 +62,13 @@ public class scr_Player : MonoBehaviour
     #region - States -
 
     public PlayerState state { get; set; }
+    private PlayerState prevState;
 
     private void StateHandler()
     {
         scr_UIManager.Instance.UpdateState(state);
+
+        prevState = state;
 
         if (playerClimb.isClimbing)
         {
@@ -95,7 +98,7 @@ public class scr_Player : MonoBehaviour
                 state = PlayerState.Sprinting;
                 playerMove.SetTargetSpeed(playerSprint.GetStateSpeed());
             }
-            else if (rb.velocity.magnitude > .01f)
+            else if (rb.velocity.magnitude > .02f)
             {
                 state = PlayerState.Walking;
                 playerMove.SetTargetSpeed(playerMove.GetStateSpeed());
@@ -103,13 +106,33 @@ public class scr_Player : MonoBehaviour
             else
             {
                 state = PlayerState.Idle;
+
             }
+
+
         }
         else
         {
             playerMove.SetMovement(true);
             state = PlayerState.Air;
         }
+
+        VelocityChange();
+    }
+
+    private void VelocityChange()
+    {
+        if(state == PlayerState.Air)
+            scr_UIManager.Instance.SetVelocity(15);
+        else if (state == PlayerState.Idle)
+            scr_UIManager.Instance.SetVelocity(0);
+        else if(state == PlayerState.Crouching && playerMove.GetSpeed() < .1f)
+            scr_UIManager.Instance.SetVelocity(-5);
+        else if(state == PlayerState.Prone && playerMove.GetSpeed() < .1f)
+            scr_UIManager.Instance.SetVelocity(-10);
+        else
+            scr_UIManager.Instance.SetVelocity(playerMove.GetTargetSpeed());
+
     }
 
     public void ResetStance()

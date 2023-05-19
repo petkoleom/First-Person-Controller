@@ -78,13 +78,22 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SwitchWeapon",
+                    "name": "Switch",
                     "type": "Button",
                     "id": "1a2fe3ae-d718-46f0-b4c8-765868f9bed3",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ADS",
+                    "type": "Value",
+                    "id": "87bf3ce9-eb67-475a-a2df-0b0fba319ade",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -370,7 +379,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SwitchWeapon",
+                    "action": "Switch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c82af437-f670-4ae8-aacb-5a578e8f833a",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ADS",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

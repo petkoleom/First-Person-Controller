@@ -11,6 +11,7 @@ public class sco_WeaponData : ScriptableObject
     [Header("General")]
     public int fireRate;
     public int damage;
+    public float spread;
     public FireMode fireMode;
 
     [Header("Ammo")]
@@ -22,12 +23,16 @@ public class sco_WeaponData : ScriptableObject
     public int ammoInReserve;
     public float reloadSpeed;
 
+
     [Header("Recoil")]
     public float horizontalRecoil;
     public float verticalRecoil;
     public float kickback;
     public Vector3 visualRecoil;
 
+    
+    [Header("ADS")]
+    public float adsSpeed;
 
 }
 public enum FireMode

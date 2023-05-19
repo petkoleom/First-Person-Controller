@@ -21,14 +21,14 @@ public class scr_WeaponBob : scr_WeaponBehaviour
     private void Start()
     {
         player = transform.root.GetChild(0).GetComponent<scr_Player>();
-        origin = transform.localPosition;
+        origin = transform.parent.localPosition;
 
     }
 
     private void Update()
     {
         if (!player.playerGround.isGrounded) return;
-        transform.localPosition = Vector3.Lerp(transform.localPosition, CalculateTargetPos(player.playerMove.GetSpeed()), Time.deltaTime * 6);
+        transform.parent.localPosition = Vector3.Lerp(transform.parent.localPosition, CalculateTargetPos(player.playerMove.GetSpeed()), Time.deltaTime * 6);
     }
 
 
@@ -39,7 +39,7 @@ public class scr_WeaponBob : scr_WeaponBehaviour
         else
             movementCounter += Time.deltaTime * (velocity + .5f);
 
-        targetPosition = origin + new Vector3(Mathf.Cos(movementCounter) * xIntensity * (velocity * .1f), Mathf.Sin(movementCounter * 2) * yIntensity * (velocity * .1f), 0);
+        targetPosition = origin + new Vector3(Mathf.Cos(movementCounter) * (weapon.state == WeaponState.ADS ? xIntensity * .1f : xIntensity) * (velocity * .1f), Mathf.Sin(movementCounter * 2) * (weapon.state == WeaponState.ADS ? yIntensity * .1f : yIntensity) * (velocity * .1f), 0);
         return targetPosition;
 
     }

@@ -14,6 +14,8 @@ public class scr_WeaponShoot : scr_WeaponBehaviour
 
     public GameObject bulletHole;
 
+    private Transform fpsCam;
+
     private void Start()
     {
         allowFire = true;
@@ -22,7 +24,7 @@ public class scr_WeaponShoot : scr_WeaponBehaviour
         weapon.data.ammoInMag = weapon.data.magSize;
         weapon.data.ammoInReserve = weapon.data.ammoReserve;
         scr_UIManager.Instance.UpdateAmmo(weapon.data.ammoInMag.ToString() + " / " + weapon.data.ammoInReserve.ToString());
-
+        fpsCam = GameObject.FindGameObjectWithTag("MainCamera").transform;
     }
 
     private void Update()
@@ -68,18 +70,27 @@ public class scr_WeaponShoot : scr_WeaponBehaviour
 
     private void RaycastShot()
     {
-        var shot = Physics.Raycast(transform.parent.position, transform.parent.forward, out hit);
+        var trajectory = fpsCam.position + fpsCam.forward * 1000f;
+        if(weapon.state != WeaponState.ADS)
+        {
+            trajectory += Random.Range(-weapon.data.spread, weapon.data.spread) * fpsCam.up;
+            trajectory += Random.Range(-weapon.data.spread, weapon.data.spread) * fpsCam.right;
+        }
+
+        trajectory -= fpsCam.position;
+        trajectory.Normalize();
+        var shot = Physics.Raycast(fpsCam.position, trajectory, out hit);
         if (shot)
         {
             GameObject bh = Instantiate(bulletHole, hit.point + hit.normal * 0.001f, Quaternion.identity);
             bh.transform.LookAt(hit.point + hit.normal);
             bh.transform.parent = hit.transform;
-            Destroy(bh, 15);
+            Destroy(bh, 60);
             var target = hit.transform.GetComponent<itf_Damage>();
             if (target != null)
             {
                 target.TakeDamage(weapon.data.damage);
-
+                scr_UIManager.Instance.ShowHitmarker(false);
             }
         }
     }
