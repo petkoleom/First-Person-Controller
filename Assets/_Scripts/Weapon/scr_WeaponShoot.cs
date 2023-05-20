@@ -89,8 +89,7 @@ public class scr_WeaponShoot : scr_WeaponBehaviour
             var target = hit.transform.GetComponent<itf_Damage>();
             if (target != null)
             {
-                target.TakeDamage(weapon.data.damage);
-                scr_UIManager.Instance.ShowHitmarker(false);
+                scr_UIManager.Instance.ShowHitmarker(target.TakeDamage(weapon.data.damage));
             }
         }
     }

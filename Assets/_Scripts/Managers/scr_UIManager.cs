@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class scr_UIManager : StaticInstance<scr_UIManager>
 {
@@ -90,22 +91,42 @@ public class scr_UIManager : StaticInstance<scr_UIManager>
     private RectTransform hitmarker;
     private bool hitmarkerActive;
 
+    [SerializeField]
+    private Vector2 hitmarkerSize;
+    [SerializeField]
+    private float hitmarkerDuration;
+
     Coroutine hitmarkerCoroutine;
 
     public void ShowHitmarker(bool killshot)
     {
-        if(hitmarkerActive)
+        if (hitmarkerActive)
             StopCoroutine(hitmarkerCoroutine);
         hitmarkerCoroutine = StartCoroutine(Hitmarker(killshot));
     }
 
     private IEnumerator Hitmarker(bool killshot)
     {
+        var x = hitmarker.GetChild(0).GetComponent<Image>();
+        var cg = hitmarker.GetComponent<CanvasGroup>();
+        x.color = killshot ? Color.red : Color.white;
+        cg.alpha = 1;
         hitmarkerActive = true;
         hitmarker.gameObject.SetActive(true);
 
+        hitmarker.sizeDelta = hitmarkerSize;
 
-        yield return new WaitForSeconds(.2f);
+        float timer = 0;
+        while (timer < hitmarkerDuration)
+        {
+            cg.alpha = Mathf.Lerp(cg.alpha, 0, timer);
+            hitmarker.sizeDelta = Vector2.Lerp(hitmarkerSize, hitmarkerSize * .2f, timer);
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+
         hitmarker.gameObject.SetActive(false);
         hitmarkerActive = false;
     }

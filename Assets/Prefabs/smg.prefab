@@ -77,10 +77,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weapon: {fileID: 0}
-  adsSpeed: 0.02
-  isADS: 0
+  adsSpeed: 0.01
   hipPos: {x: 0, y: 0, z: 0}
   adsPos: {x: -0.305, y: 0.045, z: -0.55}
+  isADS: 0
 --- !u!1001 &8551845042374212141
 PrefabInstance:
   m_ObjectHideFlags: 0

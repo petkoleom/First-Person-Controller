@@ -5,7 +5,7 @@ using UnityEngine;
 
 public interface itf_Damage
 {
-    public void TakeDamage(float damage);
+    public bool TakeDamage(float damage);
 }
 
 public interface itf_Pickup

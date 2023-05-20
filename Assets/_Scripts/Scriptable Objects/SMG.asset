@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: SMG
   weaponPrefab: {fileID: 792927488420783933, guid: 34e96e586718a514791092e6ed7f7c19, type: 3}
-  fireRate: 600
+  fireRate: 900
   damage: 30
   spread: 50
   fireMode: 2
   magSize: 30
   ammoReserve: 870
-  ammoInMag: 30
-  ammoInReserve: 870
+  ammoInMag: 27
+  ammoInReserve: 840
   reloadSpeed: 1
   horizontalRecoil: 0
   verticalRecoil: 15

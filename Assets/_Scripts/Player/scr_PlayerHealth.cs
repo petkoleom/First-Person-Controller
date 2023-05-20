@@ -22,9 +22,9 @@ public class scr_PlayerHealth : scr_PlayerBehaviour, itf_Damage
         wasFalling = isFalling;
     }
 
-    public void TakeDamage(float damage)
+    public bool TakeDamage(float damage)
     {
-
+        return false;
     }
 
     public void TakeFallDamage()
@@ -33,8 +33,6 @@ public class scr_PlayerHealth : scr_PlayerBehaviour, itf_Damage
         if(fallDistance > minFallDistance)
         {
             health -= fallDistance * 3;
-            //if (health <= 0)
-                //Destroy(transform.root.gameObject);
 
         }
     }
