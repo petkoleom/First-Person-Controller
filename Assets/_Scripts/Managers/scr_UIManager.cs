@@ -133,7 +133,7 @@ public class scr_UIManager : StaticInstance<scr_UIManager>
         hitmarkerActive = true;
         var cg = hitmarker.GetComponent<CanvasGroup>();
 
-        foreach( var line in hitmarkerLines)
+        foreach (var line in hitmarkerLines)
         {
             switch (shotType)
             {
@@ -171,6 +171,15 @@ public class scr_UIManager : StaticInstance<scr_UIManager>
 
         hitmarker.gameObject.SetActive(false);
         hitmarkerActive = false;
+    }
+
+    [Header("Spawning")]
+    [SerializeField]
+    private GameObject spawnScreen;
+
+    public void ShowSpawnscreen(bool _state)
+    {
+        spawnScreen.SetActive(_state);
     }
 
 

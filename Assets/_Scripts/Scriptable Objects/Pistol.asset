@@ -27,4 +27,4 @@ MonoBehaviour:
   verticalRecoil: 3
   kickback: 0.15
   visualRecoil: {x: -10, y: 10, z: 10}
-  adsSpeed: 0.02
+  adsSpeed: 0.01

@@ -42,12 +42,13 @@ public class scr_WeaponShoot : scr_WeaponBehaviour
             StartCoroutine(Shoot());
     }
 
-    public IEnumerator Shoot()
+    private IEnumerator Shoot()
     {
         shooting = true;
         allowFire = false;
 
-        RaycastShot();
+        DecideShotType();
+
         
         weapon.data.ammoInMag--;
 
@@ -68,7 +69,12 @@ public class scr_WeaponShoot : scr_WeaponBehaviour
 
     }
 
-    private void RaycastShot()
+    public virtual void DecideShotType()
+    {
+        RaycastShot();
+    }
+
+    public void RaycastShot()
     {
         var trajectory = fpsCam.position + fpsCam.forward * 1000f;
         if(weapon.state != WeaponState.ADS)

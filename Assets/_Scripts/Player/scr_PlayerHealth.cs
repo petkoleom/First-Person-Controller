@@ -25,7 +25,9 @@ public class scr_PlayerHealth : scr_PlayerBehaviour, itf_Damage
     public int TakeDamage(float damage)
     {
         health -= damage;
-        return 1;
+        if (health <= 0)
+            Die();
+        return 0;
     }
 
     public void TakeFallDamage()
@@ -33,10 +35,17 @@ public class scr_PlayerHealth : scr_PlayerBehaviour, itf_Damage
         float fallDistance = startOfFall - transform.localPosition.y;
         if(fallDistance > minFallDistance)
         {
-            health -= fallDistance * 3;
+            TakeDamage(fallDistance * 3);
 
         }
     }
 
     bool isFalling { get { return (!player.playerGround.isGrounded && player.rb.velocity.y < 0); } }
+
+    private void Die()
+    {
+        player.playerManager.Respawn(player.PlayerID);
+        health = 100;
+    }
+
 }

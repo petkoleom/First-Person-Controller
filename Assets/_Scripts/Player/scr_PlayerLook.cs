@@ -1,5 +1,3 @@
-using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,7 +12,9 @@ public class scr_PlayerLook : scr_PlayerBehaviour
     private float mouseX, mouseY;
     public float xRot, yRot;
 
-    private void Start()
+    private Vector3 rot;
+
+    private void Awake()
     {
         camHolder = GameObject.FindGameObjectWithTag("CameraHolder").GetComponent<Transform>();
         Cursor.lockState = CursorLockMode.Locked;
@@ -27,7 +27,7 @@ public class scr_PlayerLook : scr_PlayerBehaviour
 
     void Look()
     {
-        Vector3 rot = camHolder.transform.localRotation.eulerAngles;
+        rot = camHolder.transform.localRotation.eulerAngles;
         yRot = rot.y + mouseX;
 
         xRot -= mouseY;
@@ -41,6 +41,15 @@ public class scr_PlayerLook : scr_PlayerBehaviour
     {
         mouseX = value.Get<Vector2>().x * sensitivity * Time.fixedDeltaTime;
         mouseY = value.Get<Vector2>().y * sensitivity * Time.fixedDeltaTime;
+    }
+
+    public void ResetLook(float _yRot)
+    {
+        yRot = _yRot;
+        xRot = 0;
+
+        camHolder.transform.localRotation = Quaternion.Euler(xRot, yRot, 0);
+        player.orientation.transform.localRotation = Quaternion.Euler(0, yRot, 0);
     }
 
 }

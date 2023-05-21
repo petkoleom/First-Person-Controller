@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class scr_Player : MonoBehaviour
 {
+
+    public scr_PlayerManager playerManager { get; set; }
+
+    public int PlayerID;
+
     public scr_PlayerLook playerLook { get; set; }
     public scr_PlayerGround playerGround { get; set; }
     public scr_PlayerMove playerMove { get; set; }
@@ -51,7 +56,12 @@ public class scr_Player : MonoBehaviour
         if (playerHealth != null) playerHealth.Initialize(this);
         if (playerClimb != null) playerClimb.Initialize(this);
 
+    }
 
+    public void InitializePlayer(scr_PlayerManager _playerManager, int _id)
+    {
+        playerManager = _playerManager;
+        PlayerID = _id;
     }
 
     private void Update()
@@ -122,13 +132,13 @@ public class scr_Player : MonoBehaviour
 
     private void VelocityChange()
     {
-        if(state == PlayerState.Air)
+        if (state == PlayerState.Air)
             scr_UIManager.Instance.SetVelocity(15);
         else if (state == PlayerState.Idle)
             scr_UIManager.Instance.SetVelocity(0);
-        else if(state == PlayerState.Crouching && playerMove.GetSpeed() < .1f)
+        else if (state == PlayerState.Crouching && playerMove.GetSpeed() < .1f)
             scr_UIManager.Instance.SetVelocity(-5);
-        else if(state == PlayerState.Prone && playerMove.GetSpeed() < .1f)
+        else if (state == PlayerState.Prone && playerMove.GetSpeed() < .1f)
             scr_UIManager.Instance.SetVelocity(-10);
         else
             scr_UIManager.Instance.SetVelocity(playerMove.GetTargetSpeed());
@@ -139,6 +149,14 @@ public class scr_Player : MonoBehaviour
     {
         playerCrouch.StandUp();
         playerProne.StandUp();
+    }
+
+    public void Respawn(Transform _spawnpoint)
+    {
+        print("respawn");
+        print(_spawnpoint.position);
+        transform.SetPositionAndRotation(_spawnpoint.position, Quaternion.identity);
+        playerLook.ResetLook(_spawnpoint.localEulerAngles.y);
     }
 
 

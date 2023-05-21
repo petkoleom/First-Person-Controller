@@ -18,4 +18,5 @@ public class sco_ExplosiveData : ScriptableObject
     [Header("Throwing")]
     public bool throwable;
     public float throwDistance;
+    public float delay;
 }

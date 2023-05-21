@@ -21,4 +21,5 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 192
   throwable: 1
-  throwDistance: 20
+  throwDistance: 10
+  delay: 2
