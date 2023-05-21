@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcdee01e9b4e1074bb9920989e4474b9, type: 3}
+  m_Name: Grenade
+  m_EditorClassIdentifier: 
+  explosiveName: Grenade
+  explosivePrefab: {fileID: 1946657022929578350, guid: 544340030f47136468e7b73a03a34710, type: 3}
+  explosionParticles: {fileID: 8870371148226882675, guid: 5bd698a7aa37ab34c82622b4905b6a72, type: 3}
+  damage: 300
+  radius: 10
+  ground:
+    serializedVersion: 2
+    m_Bits: 192
+  throwable: 1
+  throwDistance: 20

@@ -22,9 +22,10 @@ public class scr_PlayerHealth : scr_PlayerBehaviour, itf_Damage
         wasFalling = isFalling;
     }
 
-    public bool TakeDamage(float damage)
+    public int TakeDamage(float damage)
     {
-        return false;
+        health -= damage;
+        return 1;
     }
 
     public void TakeFallDamage()

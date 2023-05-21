@@ -6,17 +6,17 @@ public class scr_Target : MonoBehaviour, itf_Damage
 {
     private float health = 100;
 
-    public bool TakeDamage(float damage)
+    public int TakeDamage(float damage)
     {
         health -= damage;
         if(health <= 0)
         {
             
             Destroy(gameObject, .1f);
-            return true;
+            return 2;
         }
 
-        return false;
+        return 1;
     }
 
 

@@ -5,15 +5,21 @@ using UnityEngine.UI;
 
 public class scr_UIManager : StaticInstance<scr_UIManager>
 {
-    public TMP_Text state;
-    public TMP_Text weaponState;
-    public TMP_Text speed;
-    public TMP_Text ammo;
+
+    private void Start()
+    {
+        GetHitmarkers();
+    }
 
     private void Update()
     {
         UpdateCrosshair();
     }
+
+    [Header("Debug")]
+    public TMP_Text state;
+    public TMP_Text weaponState;
+    public TMP_Text speed;
 
     public void UpdateState(PlayerState state)
     {
@@ -29,18 +35,23 @@ public class scr_UIManager : StaticInstance<scr_UIManager>
     {
         this.speed.text = speed.ToString("F1");
     }
+
+
+    [Header("Ammo")]
+    public TMP_Text ammo;
     public void UpdateAmmo(string ammo)
     {
         this.ammo.text = ammo;
     }
+
 
     [Header("Crosshair")]
     public RectTransform crosshair;
 
     [SerializeField]
     private float originSize;
-    private float currentSize;
-    private float targetSize;
+    public float currentSize;
+    public float targetSize;
     private float oldTargetSize;
 
     private float currentAlpha;
@@ -49,10 +60,13 @@ public class scr_UIManager : StaticInstance<scr_UIManager>
     [SerializeField]
     private float changeSpeed;
 
+    private bool ads;
+
     private int type;
 
     public void SetVelocity(float velocity)
     {
+        if (ads) return;
         targetSize = originSize + velocity * 5;
         oldTargetSize = targetSize;
     }
@@ -64,12 +78,14 @@ public class scr_UIManager : StaticInstance<scr_UIManager>
 
     public void ADS()
     {
+        ads = true;
         targetSize = 0;
         targetAlpha = 0;
     }
 
     public void NotADS()
     {
+        ads = false;
         targetSize = oldTargetSize;
         targetAlpha = 1;
     }
@@ -87,6 +103,7 @@ public class scr_UIManager : StaticInstance<scr_UIManager>
 
     }
 
+    [Header("Hitmarker")]
     [SerializeField]
     private RectTransform hitmarker;
     private bool hitmarkerActive;
@@ -96,22 +113,47 @@ public class scr_UIManager : StaticInstance<scr_UIManager>
     [SerializeField]
     private float hitmarkerDuration;
 
+    private Image[] hitmarkerLines;
     Coroutine hitmarkerCoroutine;
 
-    public void ShowHitmarker(bool killshot)
+    private void GetHitmarkers()
+    {
+        hitmarkerLines = hitmarker.GetChild(0).GetComponentsInChildren<Image>();
+    }
+
+    public void ShowHitmarker(int shotType)
     {
         if (hitmarkerActive)
             StopCoroutine(hitmarkerCoroutine);
-        hitmarkerCoroutine = StartCoroutine(Hitmarker(killshot));
+        hitmarkerCoroutine = StartCoroutine(Hitmarker(shotType));
     }
 
-    private IEnumerator Hitmarker(bool killshot)
+    private IEnumerator Hitmarker(int shotType)
     {
-        var x = hitmarker.GetChild(0).GetComponent<Image>();
-        var cg = hitmarker.GetComponent<CanvasGroup>();
-        x.color = killshot ? Color.red : Color.white;
-        cg.alpha = 1;
         hitmarkerActive = true;
+        var cg = hitmarker.GetComponent<CanvasGroup>();
+
+        foreach( var line in hitmarkerLines)
+        {
+            switch (shotType)
+            {
+                case 0:
+                    line.color = new Color(0, 0, 0, 0);
+                    break;
+                case 1:
+                    line.color = Color.white;
+                    break;
+                case 2:
+                    line.color = Color.red;
+                    break;
+                default:
+                    line.color = Color.white;
+                    break;
+            }
+
+        }
+
+        cg.alpha = 1;
         hitmarker.gameObject.SetActive(true);
 
         hitmarker.sizeDelta = hitmarkerSize;
@@ -120,7 +162,7 @@ public class scr_UIManager : StaticInstance<scr_UIManager>
         while (timer < hitmarkerDuration)
         {
             cg.alpha = Mathf.Lerp(cg.alpha, 0, timer);
-            hitmarker.sizeDelta = Vector2.Lerp(hitmarkerSize, hitmarkerSize * .2f, timer);
+            hitmarker.sizeDelta = Vector2.Lerp(hitmarkerSize, hitmarkerSize * 5, timer);
 
             timer += Time.deltaTime;
             yield return null;
