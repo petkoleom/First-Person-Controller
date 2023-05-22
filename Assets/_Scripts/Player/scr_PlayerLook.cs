@@ -21,17 +21,21 @@ public class scr_PlayerLook : scr_PlayerBehaviour
 
     private GameObject mainCam;
 
-    private void Awake()
+    public override void Initialize(scr_Player _player)
     {
+        base.Initialize(_player);
         CamHolder = GameObject.FindGameObjectWithTag("CameraHolder").GetComponent<Transform>();
-        mainCam = Instantiate(camPrefab, camParent.position, camParent.rotation).gameObject;
-        mainCam.transform.parent = camParent;
+        if (IsOwner)
+        {
+            mainCam = Instantiate(camPrefab, camParent.position, camParent.rotation).gameObject;
+            mainCam.transform.parent = camParent;
+        }
         Cursor.lockState = CursorLockMode.Locked;
+
     }
 
     private void Update()
     {
-
         Look();
     }
 

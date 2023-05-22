@@ -19,7 +19,7 @@ MonoBehaviour:
   Radius: 7
   Ground:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 119
   Throwable: 1
   ThrowDistance: 10
   Delay: 2

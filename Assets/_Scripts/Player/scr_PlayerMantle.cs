@@ -7,9 +7,7 @@ public class scr_PlayerMantle : scr_PlayerBehaviour
     [SerializeField]
     private Vector3 maxLedgeHeight = new Vector3(0, 2.5f, 0);
     [SerializeField]
-    private float ledgeDetectionDistance = 1;
-    [SerializeField]
-    private float mantleSpeed = 2;
+    private float ledgeDetectionDistance = 1, mantleSpeed = 2;
 
     public bool CanMantle { get; private set; }
 
@@ -38,7 +36,6 @@ public class scr_PlayerMantle : scr_PlayerBehaviour
         var _check1 = Physics.Raycast(transform.position + Vector3.up * 1.8f, Player.Orientation.forward, out _obstacleHit, ledgeDetectionDistance, Player.Ground.Ground);
         var _check2 = Physics.Raycast(transform.position+ Vector3.up * .7f, Player.Orientation.forward, out _obstacleHit, ledgeDetectionDistance, Player.Ground.Ground);
         var _check3 = Physics.Raycast(transform.position + Vector3.up * .2f, Player.Orientation.forward, out _obstacleHit, ledgeDetectionDistance, Player.Ground.Ground);
-
 
         if (_check1 || _check2 || _check3)
         {
@@ -94,5 +91,9 @@ public class scr_PlayerMantle : scr_PlayerBehaviour
 
     }
 
+    private void OnDrawGizmos()
+    {
+        Debug.DrawRay(transform.position + Vector3.up * .7f, Player.Orientation.forward);
+    }
 
 }
