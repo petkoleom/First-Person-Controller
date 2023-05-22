@@ -6,9 +6,7 @@ using UnityEngine.InputSystem;
 public class scr_WeaponSway : scr_WeaponBehaviour
 {
     [SerializeField]
-    private float intensity;
-    [SerializeField]
-    private float smooth;
+    private float intensity, smooth;
 
     private float x, y;
 
@@ -19,10 +17,10 @@ public class scr_WeaponSway : scr_WeaponBehaviour
         originRot = transform.localRotation;
     }
 
-    public void OnLook(InputValue value)
+    public void OnLook(InputValue _value)
     {
-        x = value.Get<Vector2>().x;
-        y = value.Get<Vector2>().y;
+        x = _value.Get<Vector2>().x;
+        y = _value.Get<Vector2>().y;
     }
 
     private void Update()
@@ -32,10 +30,9 @@ public class scr_WeaponSway : scr_WeaponBehaviour
 
     private void UpdateSway()
     {
-        Quaternion xAdj = Quaternion.AngleAxis(-(weapon.state == WeaponState.ADS ? intensity * .1f : intensity) * x, Vector3.up);
-        Quaternion yAdj = Quaternion.AngleAxis((weapon.state == WeaponState.ADS ? intensity * .1f : intensity) * y, Vector3.right);
-        Quaternion targetRot = originRot * xAdj * yAdj;
-
-        transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRot, Time.deltaTime * smooth);
+        Quaternion _xAdj = Quaternion.AngleAxis(-(Weapon.state == WeaponState.ADS ? intensity * .1f : intensity) * x, Vector3.up);
+        Quaternion _yAdj = Quaternion.AngleAxis((Weapon.state == WeaponState.ADS ? intensity * .1f : intensity) * y, Vector3.right);
+        Quaternion _targetRot = originRot * _xAdj * _yAdj;
+        transform.localRotation = Quaternion.Lerp(transform.localRotation, _targetRot, Time.deltaTime * smooth);
     }
 }

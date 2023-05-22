@@ -6,14 +6,14 @@ public class scr_ExplosivePlace : scr_ExplosiveBehaviour
 
     public void Place()
     {
-        RaycastHit hit;
-        var rayDown = Physics.Raycast(explosive.transform.position, Vector3.down, out hit, 3, explosive.data.ground);
-        if (rayDown)
+        RaycastHit _hit;
+        var _rayDown = Physics.Raycast(Explosive.transform.position, Vector3.down, out _hit, 3, Explosive.Data.Ground);
+        if (_rayDown)
         {
-            placePos = hit.point;
-            transform.position = hit.point;
-            Vector3 rotation = explosive.transform.eulerAngles;
-            transform.rotation = Quaternion.Euler(0, rotation.y - 90, 0);
+            placePos = _hit.point;
+            transform.position = _hit.point;
+            Vector3 _rotation = Explosive.transform.eulerAngles;
+            transform.rotation = Quaternion.Euler(0, _rotation.y - 90, 0);
 
 
         }

@@ -8,11 +8,11 @@ public class scr_PlayerSprint : scr_PlayerBehaviour
     [SerializeField]
     private float sprintSpeed = 13;
 
-    public bool sprintingHeld;
+    public bool SprintingHeld { get; private set; }
 
     public void OnSprint(InputValue value)
     {
-        sprintingHeld = value.isPressed;
+        SprintingHeld = value.isPressed;
     }
 
     public float GetStateSpeed()

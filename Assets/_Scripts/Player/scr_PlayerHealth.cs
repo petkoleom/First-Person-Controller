@@ -16,15 +16,15 @@ public class scr_PlayerHealth : scr_PlayerBehaviour, itf_Damage
         if (!wasFalling && isFalling)
             startOfFall = transform.localPosition.y;
 
-        if (!wasGrounded && player.playerGround.isGrounded)
+        if (!wasGrounded && Player.Ground.IsGrounded)
             TakeFallDamage();
-        wasGrounded = player.playerGround.isGrounded;
+        wasGrounded = Player.Ground.IsGrounded;
         wasFalling = isFalling;
     }
 
-    public int TakeDamage(float damage)
+    public int TakeDamage(float _damage)
     {
-        health -= damage;
+        health -= _damage;
         if (health <= 0)
             Die();
         return 0;
@@ -32,19 +32,19 @@ public class scr_PlayerHealth : scr_PlayerBehaviour, itf_Damage
 
     public void TakeFallDamage()
     {
-        float fallDistance = startOfFall - transform.localPosition.y;
-        if(fallDistance > minFallDistance)
+        float _fallDistance = startOfFall - transform.localPosition.y;
+        if(_fallDistance > minFallDistance)
         {
-            TakeDamage(fallDistance * 3);
+            TakeDamage(_fallDistance * 3);
 
         }
     }
 
-    bool isFalling { get { return (!player.playerGround.isGrounded && player.rb.velocity.y < 0); } }
+    private bool isFalling { get { return (!Player.Ground.IsGrounded && Player.Rb.velocity.y < 0); } }
 
     private void Die()
     {
-        player.playerManager.Respawn(player.PlayerID);
+        Player.PlayerManager.Respawn(Player.PlayerID);
         health = 100;
     }
 

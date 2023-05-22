@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class scr_ExplosiveTrigger : scr_ExplosiveBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider _other)
     {
-        StartCoroutine(explosive.exExplosion.Explode(.3f));
+        StartCoroutine(Explosive.Explosion.Explode(.3f));
     }
 }

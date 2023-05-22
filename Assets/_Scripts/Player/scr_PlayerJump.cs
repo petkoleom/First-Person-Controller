@@ -10,7 +10,7 @@ public class scr_PlayerJump : scr_PlayerBehaviour
     [SerializeField]
     private float jumpCooldown = .3f;
     
-    public bool jumpingHeld;
+    private bool jumpingHeld;
     private bool readyToJump = true;
 
     private void Start()
@@ -23,36 +23,36 @@ public class scr_PlayerJump : scr_PlayerBehaviour
         Jump();
     }
 
-    public void OnJump(InputValue value)
+    public void OnJump(InputValue _value)
     {
         //jumpingHeld = !jumpingHeld;
-        jumpingHeld = value.isPressed;
+        jumpingHeld = _value.isPressed;
     }
     private void Jump()
     {
-        if (jumpingHeld && player.playerGround.isGrounded && readyToJump && player.state != PlayerState.Sliding && !player.playerMantle.canMantle)
+        if (jumpingHeld && Player.Ground.IsGrounded && readyToJump && Player.State != PlayerState.Sliding && !Player.Mantle.CanMantle)
         {
-            if (player.state == PlayerState.Crouching || player.state == PlayerState.Prone)
+            if (Player.State == PlayerState.Crouching || Player.State == PlayerState.Prone)
             {
-                player.ResetStance();
+                Player.ResetStance();
                 readyToJump = false;
                 Invoke(nameof(ResetJump), jumpCooldown);
             }
             else
             {
                 readyToJump = false;
-                player.rb.velocity = new Vector3(player.rb.velocity.x, 0f, player.rb.velocity.z);
-                player.rb.AddForce(Vector3.up * force, ForceMode.Impulse);
+                Player.Rb.velocity = new Vector3(Player.Rb.velocity.x, 0f, Player.Rb.velocity.z);
+                Player.Rb.AddForce(Vector3.up * force, ForceMode.Impulse);
                 Invoke(nameof(ResetJump), jumpCooldown);
             }
         }
 
     }
 
-    public void DisableJump(float duration)
+    public void DisableJump(float _duration)
     {
         readyToJump = false;
-        Invoke(nameof(ResetJump), duration);
+        Invoke(nameof(ResetJump), _duration);
     }
 
     private void ResetJump()

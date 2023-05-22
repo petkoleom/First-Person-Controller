@@ -1,38 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
 public class sco_WeaponData : ScriptableObject
 {
-    public string weaponName;
-    public GameObject weaponPrefab;
+    public string Name;
+    public GameObject Prefab;
 
     [Header("General")]
-    public int fireRate;
-    public int damage;
-    public float spread;
-    public FireMode fireMode;
+    public int FireRate;
+    public AnimationCurve DamageCurve;
+    public float Spread;
+    public FireMode FireMode;
 
     [Header("Ammo")]
-    public int magSize;
-    public int ammoReserve;
+    public int MagSize;
+    public int AmmoReserve;
     [HideInInspector]
-    public int ammoInMag;
+    public int AmmoInMag;
     [HideInInspector]
-    public int ammoInReserve;
-    public float reloadSpeed;
+    public int AmmoInReserve;
+    public float ReloadSpeed;
 
 
     [Header("Recoil")]
-    public float horizontalRecoil;
-    public float verticalRecoil;
-    public float kickback;
-    public Vector3 visualRecoil;
+    public float HorizontalRecoil;
+    public float VerticalRecoil;
+    public float Kickback;
+    public Vector3 VisualRecoil;
 
-    
+
     [Header("ADS")]
-    public float adsSpeed;
+    public float ADSSpeed;
 
 }
 public enum FireMode

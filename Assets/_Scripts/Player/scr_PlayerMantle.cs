@@ -11,7 +11,7 @@ public class scr_PlayerMantle : scr_PlayerBehaviour
     [SerializeField]
     private float mantleSpeed = 2;
 
-    public bool canMantle;
+    public bool CanMantle { get; private set; }
 
     private void Update()
     {
@@ -19,12 +19,12 @@ public class scr_PlayerMantle : scr_PlayerBehaviour
 
     }
 
-    public void OnJump(InputValue value)
+    public void OnJump(InputValue _value)
     {
-        if (canMantle && player.playerGround.isGrounded)
+        if (CanMantle && Player.Ground.IsGrounded)
         {
-            canMantle = false;
-            player.playerJump.DisableJump(.2f);
+            CanMantle = false;
+            Player.Jump.DisableJump(.2f);
             StartCoroutine(Mantle(GetObstacleHeight()));
             
         }
@@ -32,64 +32,65 @@ public class scr_PlayerMantle : scr_PlayerBehaviour
 
     private void LedgeDetection()
     {
-        if (!player.playerGround.isGrounded) return;
-        RaycastHit ledgeCheckHit;
-        RaycastHit obstacleHit;
-        var check1 = Physics.Raycast(transform.localPosition + Vector3.up * 1.8f, player.orientation.forward, out obstacleHit, ledgeDetectionDistance, player.playerGround.ground);
-        var check2 = Physics.Raycast(transform.localPosition + Vector3.up * .7f, player.orientation.forward, out obstacleHit, ledgeDetectionDistance, player.playerGround.ground);
-        var check3 = Physics.Raycast(transform.localPosition + Vector3.up * .2f, player.orientation.forward, out obstacleHit, ledgeDetectionDistance, player.playerGround.ground);
+        if (!Player.Ground.IsGrounded) return;
+        RaycastHit _ledgeCheckHit;
+        RaycastHit _obstacleHit;
+        var _check1 = Physics.Raycast(transform.position + Vector3.up * 1.8f, Player.Orientation.forward, out _obstacleHit, ledgeDetectionDistance, Player.Ground.Ground);
+        var _check2 = Physics.Raycast(transform.position+ Vector3.up * .7f, Player.Orientation.forward, out _obstacleHit, ledgeDetectionDistance, Player.Ground.Ground);
+        var _check3 = Physics.Raycast(transform.position + Vector3.up * .2f, Player.Orientation.forward, out _obstacleHit, ledgeDetectionDistance, Player.Ground.Ground);
 
-        if (check1 || check2)
+
+        if (_check1 || _check2 || _check3)
         {
-            if (!Physics.Raycast(transform.localPosition + maxLedgeHeight, player.orientation.forward, out ledgeCheckHit, ledgeDetectionDistance, player.playerGround.ground))
+            if (!Physics.Raycast(transform.position + maxLedgeHeight, Player.Orientation.forward, out _ledgeCheckHit, ledgeDetectionDistance, Player.Ground.Ground))
             {
-                canMantle = true;
+                CanMantle = true;
                 //print(GetObstacleHeight());
             }
             else
-                canMantle = false;
+                CanMantle = false;
         }
         else
-            canMantle = false;
+            CanMantle = false;
     }
 
     private float GetObstacleHeight()
     {
-        float currentPlayerHeight = transform.localPosition.y;
-        float[] points = new float[3];
+        float _currentPlayerHeight = transform.position.y;
+        float[] _points = new float[3];
 
-        RaycastHit heightCheck;
-        Vector3 origin = transform.localPosition + maxLedgeHeight;
+        RaycastHit _heightCheck;
+        Vector3 _origin = transform.position + maxLedgeHeight;
 
         for (int i = 1; i < 4; i++)
         {
-            Physics.Raycast(origin + player.orientation.forward * (i * .3f), Vector3.down, out heightCheck, 2.5f, player.playerGround.ground);
-            points[i - 1] = heightCheck.point.y;
+            Physics.Raycast(_origin + Player.Orientation.forward * (i * .3f), Vector3.down, out _heightCheck, 2.5f, Player.Ground.Ground);
+            _points[i - 1] = _heightCheck.point.y;
         }
 
-        float height = 0;
-        foreach (var point in points)
+        float _height = 0;
+        foreach (var _point in _points)
         {
-            if(point > height)
-                height = point;
+            if(_point > _height)
+                _height = _point;
         }
 
 
-        return height - currentPlayerHeight;
+        return _height - _currentPlayerHeight;
     }
 
-    private IEnumerator Mantle(float height)
+    private IEnumerator Mantle(float _height)
     {
-        Vector3 forward = player.orientation.forward;
+        Vector3 _forward = Player.Orientation.forward;
 
-        if (height < 1.5f)
-            player.rb.AddForce(Vector3.up * mantleSpeed * height * 1.4f, ForceMode.VelocityChange);
-        else if(height > 2.2f)
-            player.rb.AddForce(Vector3.up * mantleSpeed * height * .8f, ForceMode.VelocityChange);
+        if (_height < 1.5f)
+            Player.Rb.AddForce(Vector3.up * mantleSpeed * _height * 1.4f, ForceMode.VelocityChange);
+        else if(_height > 2.2f)
+            Player.Rb.AddForce(Vector3.up * mantleSpeed * _height * .8f, ForceMode.VelocityChange);
         else
-            player.rb.AddForce(Vector3.up * mantleSpeed * height * .9f, ForceMode.VelocityChange);
+            Player.Rb.AddForce(Vector3.up * mantleSpeed * _height * .9f, ForceMode.VelocityChange);
         yield return new WaitForSeconds(.17f);
-        player.rb.AddForce(forward * mantleSpeed * .3f, ForceMode.VelocityChange);
+        Player.Rb.AddForce(_forward * mantleSpeed * .3f, ForceMode.VelocityChange);
 
     }
 

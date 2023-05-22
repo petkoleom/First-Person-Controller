@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class scr_ExplosiveBehaviour : MonoBehaviour
 {
     [HideInInspector]
-    public scr_Explosive explosive;
-    public void Initialize(scr_Explosive explosive)
+    public scr_Explosive Explosive;
+    public void Initialize(scr_Explosive _explosive)
     {
-        this.explosive = explosive;
+        this.Explosive = _explosive;
     }
 }

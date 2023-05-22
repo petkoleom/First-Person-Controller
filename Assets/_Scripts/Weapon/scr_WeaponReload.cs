@@ -5,39 +5,38 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(scr_WeaponShoot))]
 public class scr_WeaponReload : scr_WeaponBehaviour
 {
-    public bool reloading;
+    public bool IsReloading { get; private set; }
 
-    public void OnReload(InputValue value)
+    public void OnReload(InputValue _value)
     {
-        if(weapon.data.ammoInMag < weapon.data.magSize && weapon.data.ammoInReserve > 0)
+        if(Weapon.Data.AmmoInMag < Weapon.Data.MagSize && Weapon.Data.AmmoInReserve > 0)
             StartCoroutine(Reload());
     }
 
     public IEnumerator Reload()
     {
-        reloading = true;
-        yield return new WaitForSeconds(weapon.data.reloadSpeed);
+        IsReloading = true;
+        yield return new WaitForSeconds(Weapon.Data.ReloadSpeed);
 
-        int amountNeeded = weapon.data.magSize - weapon.data.ammoInMag;
+        int _amountNeeded = Weapon.Data.MagSize - Weapon.Data.AmmoInMag;
 
-        if(amountNeeded >= weapon.data.ammoInReserve)
+        if(_amountNeeded >= Weapon.Data.AmmoInReserve)
         {
-            weapon.data.ammoInMag += weapon.data.ammoInReserve;
-            weapon.data.ammoInReserve = 0;
+            Weapon.Data.AmmoInMag += Weapon.Data.AmmoInReserve;
+            Weapon.Data.AmmoInReserve = 0;
         }
         else
         {
-            weapon.data.ammoInMag = weapon.data.magSize;
-            weapon.data.ammoInReserve -= amountNeeded;
+            Weapon.Data.AmmoInMag = Weapon.Data.MagSize;
+            Weapon.Data.AmmoInReserve -= _amountNeeded;
         }
 
-        reloading = false;
-        scr_UIManager.Instance.UpdateAmmo(weapon.data.ammoInMag.ToString() + " / " + weapon.data.ammoInReserve.ToString());
-
+        IsReloading = false;
+        scr_UIManager.Instance.UpdateAmmo(Weapon.Data.AmmoInMag.ToString() + " / " + Weapon.Data.AmmoInReserve.ToString());
     }
 
     public void CancelReload()
     {
-        reloading = false;
+        IsReloading = false;
     }
 }

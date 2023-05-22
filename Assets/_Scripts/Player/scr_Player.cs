@@ -4,63 +4,71 @@ using UnityEngine;
 public class scr_Player : MonoBehaviour
 {
 
-    public scr_PlayerManager playerManager { get; set; }
+    public scr_PlayerManager PlayerManager { get; set; }
 
     public int PlayerID;
 
-    public scr_PlayerLook playerLook { get; set; }
-    public scr_PlayerGround playerGround { get; set; }
-    public scr_PlayerMove playerMove { get; set; }
-    public scr_PlayerJump playerJump { get; set; }
-    public scr_PlayerMantle playerMantle { get; set; }
-    public scr_PlayerSprint playerSprint { get; set; }
-    public scr_PlayerCrouch playerCrouch { get; set; }
-    public scr_PlayerProne playerProne { get; set; }
-    public scr_PlayerCamBob playerCamBob { get; set; }
-    public scr_PlayerHealth playerHealth { get; set; }
-    public scr_PlayerClimb playerClimb { get; set; }
+    public scr_PlayerLook Look { get; set; }
+    public scr_PlayerGround Ground { get; set; }
+    public scr_PlayerMove Move { get; set; }
+    public scr_PlayerJump Jump { get; set; }
+    public scr_PlayerMantle Mantle { get; set; }
+    public scr_PlayerSprint Sprint { get; set; }
+    public scr_PlayerCrouch Crouch { get; set; }
+    public scr_PlayerProne Prone { get; set; }
+    public scr_PlayerCamBob CamBob { get; set; }
+    public scr_PlayerHealth Health { get; set; }
+    public scr_PlayerClimb Climb { get; set; }
 
 
-    public Rigidbody rb { get; set; }
-    public Transform orientation { get; set; }
-    public Transform camHolder { get; set; }
+    public Rigidbody Rb { get; set; }
+    public Transform Orientation { get; set; }
+    public Transform CamHolder { get; set; }
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
-        orientation = transform.GetChild(0);
-        camHolder = transform.root.GetChild(1);
-        rb.freezeRotation = true;
+        Rb = GetComponent<Rigidbody>();
+        Orientation = transform.GetChild(0);
+        CamHolder = transform.root.GetChild(1);
+        Rb.freezeRotation = true;
 
-        playerLook = GetComponent<scr_PlayerLook>();
-        playerGround = GetComponent<scr_PlayerGround>();
-        playerMove = GetComponent<scr_PlayerMove>();
-        playerJump = GetComponent<scr_PlayerJump>();
-        playerMantle = GetComponent<scr_PlayerMantle>();
-        playerSprint = GetComponent<scr_PlayerSprint>();
-        playerCrouch = GetComponent<scr_PlayerCrouch>();
-        playerProne = GetComponent<scr_PlayerProne>();
-        playerCamBob = camHolder.GetComponent<scr_PlayerCamBob>();
-        playerHealth = GetComponent<scr_PlayerHealth>();
-        playerClimb = GetComponent<scr_PlayerClimb>();
+        Look = GetComponent<scr_PlayerLook>();
+        Ground = GetComponent<scr_PlayerGround>();
+        Move = GetComponent<scr_PlayerMove>();
+        Jump = GetComponent<scr_PlayerJump>();
+        Mantle = GetComponent<scr_PlayerMantle>();
+        Sprint = GetComponent<scr_PlayerSprint>();
+        Crouch = GetComponent<scr_PlayerCrouch>();
+        Prone = GetComponent<scr_PlayerProne>();
+        CamBob = CamHolder.GetComponent<scr_PlayerCamBob>();
+        Health = GetComponent<scr_PlayerHealth>();
+        Climb = GetComponent<scr_PlayerClimb>();
 
-        if (playerLook != null) playerLook.Initialize(this);
-        if (playerGround != null) playerGround.Initialize(this);
-        if (playerMove != null) playerMove.Initialize(this);
-        if (playerJump != null) playerJump.Initialize(this);
-        if (playerMantle != null) playerMantle.Initialize(this);
-        if (playerSprint != null) playerSprint.Initialize(this);
-        if (playerCrouch != null) playerCrouch.Initialize(this);
-        if (playerProne != null) playerProne.Initialize(this);
-        if (playerCamBob != null) playerCamBob.Initialize(this);
-        if (playerHealth != null) playerHealth.Initialize(this);
-        if (playerClimb != null) playerClimb.Initialize(this);
+        if (Look != null) Look.Initialize(this);
+        if (Ground != null) Ground.Initialize(this);
+        if (Move != null)
+        {
+            Move.Initialize(this);
+            Move.SetTargetSpeed(1);
+        }
+        if (Jump != null) Jump.Initialize(this);
+        if (Mantle != null) Mantle.Initialize(this);
+        if (Sprint != null) Sprint.Initialize(this);
+        if (Crouch != null) Crouch.Initialize(this);
+        if (Prone != null) Prone.Initialize(this);
+        if (CamBob != null) CamBob.Initialize(this);
+        if (Health != null) Health.Initialize(this);
+        if (Climb != null) Climb.Initialize(this);
+
+        
 
     }
 
+
+
     public void InitializePlayer(scr_PlayerManager _playerManager, int _id)
     {
-        playerManager = _playerManager;
+        PlayerManager = _playerManager;
         PlayerID = _id;
     }
 
@@ -71,51 +79,48 @@ public class scr_Player : MonoBehaviour
 
     #region - States -
 
-    public PlayerState state { get; set; }
-    private PlayerState prevState;
+    public PlayerState State { get; set; }
 
     private void StateHandler()
     {
-        scr_UIManager.Instance.UpdateState(state);
+        scr_UIManager.Instance.UpdateState(State);
 
-        prevState = state;
-
-        if (playerClimb.isClimbing)
+        if (Climb.IsClimbing)
         {
-            state = PlayerState.Climbing;
-            playerMove.SetMovement(false);
+            State = PlayerState.Climbing;
+            Move.SetMovement(false);
         }
-        else if (playerGround.isGrounded)
+        else if (Ground.IsGrounded)
         {
-            playerMove.SetMovement(true);
-            if (playerProne.prone)
+            Move.SetMovement(true);
+            if (Prone.Prone)
             {
-                state = PlayerState.Prone;
-                playerMove.SetTargetSpeed(playerProne.GetStateSpeed());
+                State = PlayerState.Prone;
+                Move.SetTargetSpeed(Prone.GetStateSpeed());
             }
-            else if (playerCrouch.sliding)
+            else if (Crouch.IsSliding)
             {
-                state = PlayerState.Sliding;
-                playerMove.SetTargetSpeed(playerCrouch.GetStateSpeed2());
+                State = PlayerState.Sliding;
+                Move.SetTargetSpeed(Crouch.GetStateSpeed2());
             }
-            else if (playerCrouch.crouching)
+            else if (Crouch.IsCrouching)
             {
-                state = PlayerState.Crouching;
-                playerMove.SetTargetSpeed(playerCrouch.GetStateSpeed());
+                State = PlayerState.Crouching;
+                Move.SetTargetSpeed(Crouch.GetStateSpeed());
             }
-            else if (playerSprint.sprintingHeld && playerMove.walkingForward && playerMove.moveDir != Vector3.zero)
+            else if (Sprint.SprintingHeld && Move.walkingForward && Move.moveDir != Vector3.zero)
             {
-                state = PlayerState.Sprinting;
-                playerMove.SetTargetSpeed(playerSprint.GetStateSpeed());
+                State = PlayerState.Sprinting;
+                Move.SetTargetSpeed(Sprint.GetStateSpeed());
             }
-            else if (rb.velocity.magnitude > .02f)
+            else if (Rb.velocity.magnitude > .02f)
             {
-                state = PlayerState.Walking;
-                playerMove.SetTargetSpeed(playerMove.GetStateSpeed());
+                State = PlayerState.Walking;
+                Move.SetTargetSpeed(Move.GetStateSpeed());
             }
             else
             {
-                state = PlayerState.Idle;
+                State = PlayerState.Idle;
 
             }
 
@@ -123,8 +128,8 @@ public class scr_Player : MonoBehaviour
         }
         else
         {
-            playerMove.SetMovement(true);
-            state = PlayerState.Air;
+            Move.SetMovement(true);
+            State = PlayerState.Air;
         }
 
         VelocityChange();
@@ -132,31 +137,29 @@ public class scr_Player : MonoBehaviour
 
     private void VelocityChange()
     {
-        if (state == PlayerState.Air)
+        if (State == PlayerState.Air)
             scr_UIManager.Instance.SetVelocity(15);
-        else if (state == PlayerState.Idle)
+        else if (State == PlayerState.Idle)
             scr_UIManager.Instance.SetVelocity(0);
-        else if (state == PlayerState.Crouching && playerMove.GetSpeed() < .1f)
+        else if (State == PlayerState.Crouching && Move.GetSpeed() < .1f)
             scr_UIManager.Instance.SetVelocity(-5);
-        else if (state == PlayerState.Prone && playerMove.GetSpeed() < .1f)
+        else if (State == PlayerState.Prone && Move.GetSpeed() < .1f)
             scr_UIManager.Instance.SetVelocity(-10);
         else
-            scr_UIManager.Instance.SetVelocity(playerMove.GetTargetSpeed());
+            scr_UIManager.Instance.SetVelocity(Move.GetTargetSpeed());
 
     }
 
     public void ResetStance()
     {
-        playerCrouch.StandUp();
-        playerProne.StandUp();
+        Crouch.StandUp();
+        Prone.StandUp();
     }
 
     public void Respawn(Transform _spawnpoint)
     {
-        print("respawn");
-        print(_spawnpoint.position);
         transform.SetPositionAndRotation(_spawnpoint.position, Quaternion.identity);
-        playerLook.ResetLook(_spawnpoint.localEulerAngles.y);
+        Look.ResetLook(_spawnpoint.localEulerAngles.y);
     }
 
 

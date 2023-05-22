@@ -3,48 +3,41 @@ using UnityEngine.InputSystem;
 
 public class scr_Explosive : MonoBehaviour
 {
-    public sco_ExplosiveData data;
+    public sco_ExplosiveData Data;
 
-    public Rigidbody rb;
-    public scr_ExplosiveThrow exThrow { get; set; }
-    public scr_ExplosivePlace exPlace { get; set; }
-    public scr_ExplosiveExplosion exExplosion { get; set; }
-   
-    public scr_ExplosiveTrigger exTrigger { get; set; }
+    public Rigidbody Rb;
+    public scr_ExplosiveThrow Throw { get; set; }
+    public scr_ExplosivePlace Place { get; set; }
+    public scr_ExplosiveExplosion Explosion { get; set; }
 
-
-    private void Awake()
+    public scr_ExplosiveTrigger Trigger { get; set; }
+    public void OnExplosive(InputValue _value)
     {
-        
-    }
+        GameObject _go = Instantiate(Data.Prefab, transform.position, Quaternion.identity);
 
-    public void OnExplosive(InputValue value)
-    {
-        GameObject go = Instantiate(data.explosivePrefab, transform.position, Quaternion.identity);
-        
 
-        exExplosion = go.GetComponent<scr_ExplosiveExplosion>();
-        exExplosion.Initialize(this);
+        Explosion = _go.GetComponent<scr_ExplosiveExplosion>();
+        Explosion.Initialize(this);
 
-        go.TryGetComponent<Rigidbody>(out rb);
+        _go.TryGetComponent<Rigidbody>(out Rb);
 
-        exThrow = go.GetComponent<scr_ExplosiveThrow>();
-        exPlace = go.GetComponent<scr_ExplosivePlace>();
-        exTrigger = go.transform.GetComponentInChildren<scr_ExplosiveTrigger>();
+        Throw = _go.GetComponent<scr_ExplosiveThrow>();
+        Place = _go.GetComponent<scr_ExplosivePlace>();
+        Trigger = _go.transform.GetComponentInChildren<scr_ExplosiveTrigger>();
 
-        if (exThrow != null)
+        if (Throw != null)
         {
-            exThrow.Initialize(this);
-            exThrow.Throw();
+            Throw.Initialize(this);
+            Throw.Throw();
         }
-        if (exPlace != null) 
-        { 
-            exPlace.Initialize(this);
-            exPlace.Place();
-        }
-        if(exTrigger != null)
+        if (Place != null)
         {
-            exTrigger.Initialize(this);
+            Place.Initialize(this);
+            Place.Place();
+        }
+        if (Trigger != null)
+        {
+            Trigger.Initialize(this);
         }
 
 

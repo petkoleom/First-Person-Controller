@@ -1,22 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class sco_ExplosiveData : ScriptableObject 
+public class sco_ExplosiveData : ScriptableObject
 {
 
-    public string explosiveName;
-    public GameObject explosivePrefab;
-    public ParticleSystem explosionParticles;
+    public string Name;
+    public GameObject Prefab;
+    public ParticleSystem Explosion;
 
     [Header("General")]
-    public float damage;
-    public float radius;
-    public LayerMask ground;
+    public float Damage;
+    public float Radius;
+    public LayerMask Ground;
 
     [Header("Throwing")]
-    public bool throwable;
-    public float throwDistance;
-    public float delay;
+    public bool Throwable;
+    public float ThrowDistance;
+    public float Delay;
 }

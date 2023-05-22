@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class scr_UIManager : StaticInstance<scr_UIManager>
 {
-
     private void Start()
     {
         GetHitmarkers();
@@ -17,63 +16,58 @@ public class scr_UIManager : StaticInstance<scr_UIManager>
     }
 
     [Header("Debug")]
-    public TMP_Text state;
-    public TMP_Text weaponState;
-    public TMP_Text speed;
 
-    public void UpdateState(PlayerState state)
+    [SerializeField]
+    private TMP_Text state; 
+    [SerializeField]
+    private TMP_Text weaponState; 
+    [SerializeField]
+    private TMP_Text speed;
+
+    public void UpdateState(PlayerState _state)
     {
-        this.state.text = state.ToString();
+        this.state.text = _state.ToString();
     }
 
-    public void UpdateWeaponState(WeaponState state)
+    public void UpdateWeaponState(WeaponState _state)
     {
-        this.weaponState.text = state.ToString();
+        this.weaponState.text = _state.ToString();
     }
 
-    public void UpdateSpeed(float speed)
+    public void UpdateSpeed(float _speed)
     {
-        this.speed.text = speed.ToString("F1");
+        this.speed.text = _speed.ToString("F1");
     }
-
 
     [Header("Ammo")]
-    public TMP_Text ammo;
-    public void UpdateAmmo(string ammo)
+    [SerializeField]
+    private TMP_Text ammo;
+    public void UpdateAmmo(string _ammo)
     {
-        this.ammo.text = ammo;
+        this.ammo.text = _ammo;
     }
 
-
     [Header("Crosshair")]
-    public RectTransform crosshair;
+    public RectTransform Crosshair;
 
     [SerializeField]
-    private float originSize;
-    public float currentSize;
-    public float targetSize;
-    private float oldTargetSize;
-
-    private float currentAlpha;
-    private float targetAlpha;
-
-    [SerializeField]
-    private float changeSpeed;
+    private float originSize, changeSpeed;
+    private float currentSize, targetSize, oldTargetSize, currentAlpha, targetAlpha;
 
     private bool ads;
 
     private int type;
 
-    public void SetVelocity(float velocity)
+    public void SetVelocity(float _velocity)
     {
         if (ads) return;
-        targetSize = originSize + velocity * 5;
+        targetSize = originSize + _velocity * 5;
         oldTargetSize = targetSize;
     }
 
-    public void SetType(int type)
+    public void SetType(int _type)
     {
-        this.type = type;
+        this.type = _type;
     }
 
     public void ADS()
@@ -92,14 +86,14 @@ public class scr_UIManager : StaticInstance<scr_UIManager>
 
     private void UpdateCrosshair()
     {
-        float vel = 0;
-        float vel2 = 0;
+        float _vel = 0;
+        float _vel2 = 0;
 
-        currentSize = Mathf.SmoothDamp(currentSize, targetSize, ref vel, changeSpeed);
-        crosshair.sizeDelta = new Vector2(currentSize, currentSize);
+        currentSize = Mathf.SmoothDamp(currentSize, targetSize, ref _vel, changeSpeed);
+        Crosshair.sizeDelta = new Vector2(currentSize, currentSize);
 
-        currentAlpha = Mathf.SmoothDamp(currentAlpha, targetAlpha, ref vel2, changeSpeed / 2);
-        crosshair.GetComponent<CanvasGroup>().alpha = currentAlpha;
+        currentAlpha = Mathf.SmoothDamp(currentAlpha, targetAlpha, ref _vel2, changeSpeed / 2);
+        Crosshair.GetComponent<CanvasGroup>().alpha = currentAlpha;
 
     }
 
@@ -121,50 +115,50 @@ public class scr_UIManager : StaticInstance<scr_UIManager>
         hitmarkerLines = hitmarker.GetChild(0).GetComponentsInChildren<Image>();
     }
 
-    public void ShowHitmarker(int shotType)
+    public void ShowHitmarker(int _shotType)
     {
         if (hitmarkerActive)
             StopCoroutine(hitmarkerCoroutine);
-        hitmarkerCoroutine = StartCoroutine(Hitmarker(shotType));
+        hitmarkerCoroutine = StartCoroutine(Hitmarker(_shotType));
     }
 
-    private IEnumerator Hitmarker(int shotType)
+    private IEnumerator Hitmarker(int _shotType)
     {
         hitmarkerActive = true;
-        var cg = hitmarker.GetComponent<CanvasGroup>();
+        var _cg = hitmarker.GetComponent<CanvasGroup>();
 
-        foreach (var line in hitmarkerLines)
+        foreach (var _line in hitmarkerLines)
         {
-            switch (shotType)
+            switch (_shotType)
             {
                 case 0:
-                    line.color = new Color(0, 0, 0, 0);
+                    _line.color = new Color(0, 0, 0, 0);
                     break;
                 case 1:
-                    line.color = Color.white;
+                    _line.color = Color.white;
                     break;
                 case 2:
-                    line.color = Color.red;
+                    _line.color = Color.red;
                     break;
                 default:
-                    line.color = Color.white;
+                    _line.color = Color.white;
                     break;
             }
 
         }
 
-        cg.alpha = 1;
+        _cg.alpha = 1;
         hitmarker.gameObject.SetActive(true);
 
         hitmarker.sizeDelta = hitmarkerSize;
 
-        float timer = 0;
-        while (timer < hitmarkerDuration)
+        float _timer = 0;
+        while (_timer < hitmarkerDuration)
         {
-            cg.alpha = Mathf.Lerp(cg.alpha, 0, timer);
-            hitmarker.sizeDelta = Vector2.Lerp(hitmarkerSize, hitmarkerSize * 5, timer);
+            _cg.alpha = Mathf.Lerp(_cg.alpha, 0, _timer);
+            hitmarker.sizeDelta = Vector2.Lerp(hitmarkerSize, hitmarkerSize * 5, _timer);
 
-            timer += Time.deltaTime;
+            _timer += Time.deltaTime;
             yield return null;
         }
 

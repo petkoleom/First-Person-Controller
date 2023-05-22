@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcdee01e9b4e1074bb9920989e4474b9, type: 3}
   m_Name: Grenade
   m_EditorClassIdentifier: 
-  explosiveName: Grenade
-  explosivePrefab: {fileID: 1946657022929578350, guid: 544340030f47136468e7b73a03a34710, type: 3}
-  explosionParticles: {fileID: 8870371148226882675, guid: 5bd698a7aa37ab34c82622b4905b6a72, type: 3}
-  damage: 300
-  radius: 10
-  ground:
+  Name: Grenade
+  Prefab: {fileID: 1946657022929578350, guid: 544340030f47136468e7b73a03a34710, type: 3}
+  Explosion: {fileID: 8870371148226882675, guid: 5bd698a7aa37ab34c82622b4905b6a72, type: 3}
+  Damage: 300
+  Radius: 7
+  Ground:
     serializedVersion: 2
-    m_Bits: 192
-  throwable: 1
-  throwDistance: 10
-  delay: 2
+    m_Bits: 384
+  Throwable: 1
+  ThrowDistance: 10
+  Delay: 2

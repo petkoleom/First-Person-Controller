@@ -12,19 +12,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a3d05d16c6d8894d907eb0e9cc0fa1a, type: 3}
   m_Name: SMG
   m_EditorClassIdentifier: 
-  weaponName: SMG
-  weaponPrefab: {fileID: 792927488420783933, guid: 34e96e586718a514791092e6ed7f7c19, type: 3}
-  fireRate: 800
-  damage: 30
-  spread: 50
-  fireMode: 2
-  magSize: 30
-  ammoReserve: 870
-  ammoInMag: 15
-  ammoInReserve: 810
-  reloadSpeed: 1
-  horizontalRecoil: 0
-  verticalRecoil: 15
-  kickback: 0.13
-  visualRecoil: {x: -0.5, y: 0.5, z: 3}
-  adsSpeed: 0.01
+  Name: SMG
+  Prefab: {fileID: 792927488420783933, guid: 34e96e586718a514791092e6ed7f7c19, type: 3}
+  FireRate: 800
+  DamageCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 30
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 15
+      value: 30
+      inSlope: 0.032533105
+      outSlope: 0.032533105
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.23649724
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 100
+      value: 5
+      inSlope: -0.29411766
+      outSlope: -0.29411766
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  Spread: 10
+  FireMode: 2
+  MagSize: 30
+  AmmoReserve: 900
+  AmmoInMag: 0
+  AmmoInReserve: 0
+  ReloadSpeed: 1
+  HorizontalRecoil: 0
+  VerticalRecoil: 0
+  Kickback: 0.2
+  VisualRecoil: {x: 1, y: 1, z: 1}
+  ADSSpeed: 0.01

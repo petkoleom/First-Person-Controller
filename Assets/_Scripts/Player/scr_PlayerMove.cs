@@ -44,52 +44,52 @@ public class scr_PlayerMove : scr_PlayerBehaviour
     private void Move()
     {
         var dragMod = groundDrag / 10;
-        moveDir = player.orientation.forward * moveInput.z + player.orientation.right * moveInput.x;
+        moveDir = Player.Orientation.forward * moveInput.z + Player.Orientation.right * moveInput.x;
         walkingForward = moveInput.z > 0;
-        if (player.playerGround.OnSlope())
-            player.rb.AddForce(GetSlopeMoveDir(moveDir) * speed * 10 * dragMod, ForceMode.Acceleration);
-        else if (player.playerGround.isGrounded)
-            player.rb.AddForce(moveDir.normalized * speed * 10 * dragMod, ForceMode.Acceleration);
+        if (Player.Ground.OnSlope())
+            Player.Rb.AddForce(GetSlopeMoveDir(moveDir) * speed * 10 * dragMod, ForceMode.Acceleration);
+        else if (Player.Ground.IsGrounded)
+            Player.Rb.AddForce(moveDir.normalized * speed * 10 * dragMod, ForceMode.Acceleration);
         else
-            player.rb.AddForce(moveDir.normalized * speed * 10 * dragMod * airMultiplier, ForceMode.Acceleration);
+            Player.Rb.AddForce(moveDir.normalized * speed * 10 * dragMod * airMultiplier, ForceMode.Acceleration);
 
-        scr_UIManager.Instance.UpdateSpeed(player.rb.velocity.magnitude);
+        scr_UIManager.Instance.UpdateSpeed(Player.Rb.velocity.magnitude);
     }
 
     private Vector3 GetSlopeMoveDir(Vector3 direction)
     {
-        return Vector3.ProjectOnPlane(direction, player.playerGround.slopeHit.normal).normalized;
+        return Vector3.ProjectOnPlane(direction, Player.Ground.SlopeHit.normal).normalized;
     }
 
     void CounterMovement()
     {
-        if (player.state != PlayerState.Climbing)
-            player.rb.useGravity = !player.playerGround.OnSlope();
+        if (Player.State != PlayerState.Climbing)
+            Player.Rb.useGravity = !Player.Ground.OnSlope();
 
-        Vector3 vel = player.rb.velocity;
+        Vector3 vel = Player.Rb.velocity;
 
         float coefficientOfFriction = (speed * groundDrag) / targetSpeed;
 
-        if (player.playerGround.isGrounded)
-            player.rb.AddForce(-vel * coefficientOfFriction, ForceMode.Acceleration);
+        if (Player.Ground.IsGrounded)
+            Player.Rb.AddForce(-vel * coefficientOfFriction, ForceMode.Acceleration);
     }
 
     private void SpeedLimiting()
     {
 
-        if (player.playerGround.OnSlope())
+        if (Player.Ground.OnSlope())
         {
-            if (player.rb.velocity.magnitude > speed)
-                player.rb.velocity = player.rb.velocity.normalized * speed;
+            if (Player.Rb.velocity.magnitude > speed)
+                Player.Rb.velocity = Player.Rb.velocity.normalized * speed;
         }
 
-        Vector3 flatVel = new Vector3(player.rb.velocity.x, 0, player.rb.velocity.z);
-        if (player.playerGround.isGrounded)
+        Vector3 flatVel = new Vector3(Player.Rb.velocity.x, 0, Player.Rb.velocity.z);
+        if (Player.Ground.IsGrounded)
         {
             if (flatVel.magnitude > speed)
             {
                 Vector3 limitedVel = flatVel.normalized * speed;
-                player.rb.velocity = new Vector3(limitedVel.x, player.rb.velocity.y, limitedVel.z);
+                Player.Rb.velocity = new Vector3(limitedVel.x, Player.Rb.velocity.y, limitedVel.z);
             }
         }
         else if (speed > walkSpeed)
@@ -97,7 +97,7 @@ public class scr_PlayerMove : scr_PlayerBehaviour
             if (flatVel.magnitude > speed * .8f)
             {
                 Vector3 limitedVel = flatVel.normalized * speed * .8f;
-                player.rb.velocity = new Vector3(limitedVel.x, player.rb.velocity.y, limitedVel.z);
+                Player.Rb.velocity = new Vector3(limitedVel.x, Player.Rb.velocity.y, limitedVel.z);
             }
         }
         else
@@ -105,14 +105,14 @@ public class scr_PlayerMove : scr_PlayerBehaviour
             if (flatVel.magnitude > speed * airMultiplier * 2)
             {
                 Vector3 limitedVel = flatVel.normalized * speed * airMultiplier * 2.5f;
-                player.rb.velocity = new Vector3(limitedVel.x, player.rb.velocity.y, limitedVel.z);
+                Player.Rb.velocity = new Vector3(limitedVel.x, Player.Rb.velocity.y, limitedVel.z);
             }
         }
     }
 
     private void SetSpeed()
     {
-        if (player.state == PlayerState.Sliding)
+        if (Player.State == PlayerState.Sliding)
             speed = targetSpeed;
 
         else if (targetSpeed - lastTargetSpeed > 4 && speed > 0)
@@ -131,7 +131,7 @@ public class scr_PlayerMove : scr_PlayerBehaviour
 
     public float GetSpeed()
     {
-        return player.rb.velocity.magnitude;
+        return Player.Rb.velocity.magnitude;
     }
 
     public float GetTargetSpeed()

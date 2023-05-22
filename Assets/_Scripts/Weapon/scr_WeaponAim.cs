@@ -5,20 +5,15 @@ public class scr_WeaponAim : scr_WeaponBehaviour
 {
     [SerializeField]
     private float adsSpeed;
-
-
     [SerializeField]
     private Vector3 hipPos;
     [SerializeField]
     private Vector3 adsPos;
 
-
-    public bool isADS;
-
+    public bool IsADS;
 
     private bool adsHeld;
     private bool canADS { get { return adsHeld; } }
-
 
     private Vector3 curPos;
     private Vector3 targetPos;
@@ -31,26 +26,26 @@ public class scr_WeaponAim : scr_WeaponBehaviour
 
     private void Start()
     {
-        adsSpeed = weapon.data.adsSpeed;
+        adsSpeed = Weapon.Data.ADSSpeed;
     }
 
 
-    public void OnADS(InputValue value)
+    public void OnADS(InputValue _value)
     {
-        adsHeld = value.isPressed;
+        adsHeld = _value.isPressed;
     }
 
     private void SetADS()
     {
         if (canADS)
         {
-            isADS = true;
+            IsADS = true;
             targetPos = adsPos;
             scr_UIManager.Instance.ADS();
         }
         else
         {
-            isADS = false;
+            IsADS = false;
             targetPos = hipPos;
             scr_UIManager.Instance.NotADS();
         }
@@ -58,8 +53,8 @@ public class scr_WeaponAim : scr_WeaponBehaviour
 
     private void SmoothTransition()
     {
-        var vel = Vector3.zero;
-        curPos = Vector3.SmoothDamp(curPos, targetPos, ref vel, adsSpeed);
+        var _vel = Vector3.zero;
+        curPos = Vector3.SmoothDamp(curPos, targetPos, ref _vel, adsSpeed);
         transform.parent.localPosition = curPos;
     }
 

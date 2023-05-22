@@ -5,68 +5,57 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(scr_WeaponReload))]
 public class scr_WeaponShoot : scr_WeaponBehaviour
 {
-    private bool shootHeld;
+    private bool shootHeld, allowFire;
 
     private RaycastHit hit;
-    private bool allowFire;
 
-    public bool shooting;
-
-    public GameObject bulletHole;
+    [SerializeField]
+    private GameObject bulletHole;
 
     private Transform fpsCam;
 
-    private void Start()
+    public void Start()
     {
         allowFire = true;
 
         //ammo
-        weapon.data.ammoInMag = weapon.data.magSize;
-        weapon.data.ammoInReserve = weapon.data.ammoReserve;
-        scr_UIManager.Instance.UpdateAmmo(weapon.data.ammoInMag.ToString() + " / " + weapon.data.ammoInReserve.ToString());
+        Weapon.Data.AmmoInMag = Weapon.Data.MagSize;
+        Weapon.Data.AmmoInReserve = Weapon.Data.AmmoReserve;
+        scr_UIManager.Instance.UpdateAmmo(Weapon.Data.AmmoInMag.ToString() + " / " + Weapon.Data.AmmoInReserve.ToString());
         fpsCam = GameObject.FindGameObjectWithTag("MainCamera").transform;
     }
 
     private void Update()
     {
-        if (weapon.data.fireMode == FireMode.Auto && shootHeld && canShoot)
+        if (Weapon.Data.FireMode == FireMode.Auto && shootHeld && canShoot)
         {
             StartCoroutine(Shoot());
         }
     }
 
-    public void OnShoot(InputValue value)
+    public void OnShoot(InputValue _value)
     {
-        shootHeld = value.isPressed;
+        shootHeld = _value.isPressed;
         if (canShoot && shootHeld)
             StartCoroutine(Shoot());
     }
 
     private IEnumerator Shoot()
     {
-        shooting = true;
         allowFire = false;
-
         DecideShotType();
+        Weapon.Data.AmmoInMag--;
+        Weapon.Recoil.Recoil();
+        scr_UIManager.Instance.UpdateAmmo(Weapon.Data.AmmoInMag.ToString() + " / " + Weapon.Data.AmmoInReserve.ToString());
 
-        
-        weapon.data.ammoInMag--;
+        yield return new WaitForSeconds(60f / Weapon.Data.FireRate);
 
-        weapon.weaponRecoil.Recoil();
-
-        scr_UIManager.Instance.UpdateAmmo(weapon.data.ammoInMag.ToString() + " / " + weapon.data.ammoInReserve.ToString());
-
-        yield return new WaitForSeconds(60f / weapon.data.fireRate);
-
-        shooting = false;
         allowFire = true;
-
-        if (weapon.data.ammoInMag == 0 && weapon.data.ammoInReserve > 0)
+        if (Weapon.Data.AmmoInMag == 0 && Weapon.Data.AmmoInReserve > 0)
         {
             yield return new WaitForSeconds(.5f);
-            StartCoroutine(weapon.weaponReload.Reload());
+            StartCoroutine(Weapon.Reload.Reload());
         }
-
     }
 
     public virtual void DecideShotType()
@@ -76,26 +65,25 @@ public class scr_WeaponShoot : scr_WeaponBehaviour
 
     public void RaycastShot()
     {
-        var trajectory = fpsCam.position + fpsCam.forward * 1000f;
-        if(weapon.state != WeaponState.ADS)
+        var _trajectory = fpsCam.position + fpsCam.forward * 1000f;
+        if (Weapon.state != WeaponState.ADS)
         {
-            trajectory += Random.Range(-weapon.data.spread, weapon.data.spread) * fpsCam.up;
-            trajectory += Random.Range(-weapon.data.spread, weapon.data.spread) * fpsCam.right;
+            _trajectory += Random.Range(-Weapon.Data.Spread, Weapon.Data.Spread) * fpsCam.up;
+            _trajectory += Random.Range(-Weapon.Data.Spread, Weapon.Data.Spread) * fpsCam.right;
         }
-
-        trajectory -= fpsCam.position;
-        trajectory.Normalize();
-        var shot = Physics.Raycast(fpsCam.position, trajectory, out hit);
-        if (shot)
+        _trajectory -= fpsCam.position;
+        _trajectory.Normalize();
+        var _shot = Physics.Raycast(fpsCam.position, _trajectory, out hit);
+        if (_shot)
         {
-            GameObject bh = Instantiate(bulletHole, hit.point + hit.normal * 0.001f, Quaternion.identity);
-            bh.transform.LookAt(hit.point + hit.normal);
-            bh.transform.parent = hit.transform;
-            Destroy(bh, 60);
-            var target = hit.transform.GetComponent<itf_Damage>();
-            if (target != null)
+            GameObject _bulletHole = Instantiate(bulletHole, hit.point + hit.normal * 0.001f, Quaternion.identity);
+            _bulletHole.transform.LookAt(hit.point + hit.normal);
+            _bulletHole.transform.parent = hit.transform;
+            Destroy(_bulletHole, 60);
+            var _target = hit.transform.GetComponent<itf_Damage>();
+            if (_target != null)
             {
-                scr_UIManager.Instance.ShowHitmarker(target.TakeDamage(weapon.data.damage));
+                scr_UIManager.Instance.ShowHitmarker(_target.TakeDamage(CalculateDamage(hit.distance)));
             }
         }
     }
@@ -106,6 +94,15 @@ public class scr_WeaponShoot : scr_WeaponBehaviour
         allowFire = true;
     }
 
-    private bool canShoot { get { return allowFire && weapon.data.ammoInMag > 0 && weapon.state != WeaponState.Reloading; } }
+    private bool canShoot { get { return allowFire && Weapon.Data.AmmoInMag > 0 && Weapon.state != WeaponState.Reloading; } }
+
+    private float CalculateDamage(float _distance)
+    {
+        int _roundedDistance = Mathf.FloorToInt(_distance);
+        var _damage = Weapon.Data.DamageCurve.Evaluate(_roundedDistance);
+        return _damage;
+    }
+
+
 
 }

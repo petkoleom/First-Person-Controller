@@ -11,33 +11,33 @@ public class scr_PlayerProne : scr_PlayerBehaviour
     private float proneSpeed;
 
     private Vector3 originalScale;
-    public bool prone;
+    public bool Prone { get; private set; }
 
     private void Start()
     {
         originalScale = transform.localScale;
-        prone = false;
+        Prone = false;
     }
 
-    public void OnProne(InputValue value)
+    public void OnProne(InputValue _value)
     {
-        if (!prone && player.playerGround.isGrounded)
-            Prone();
+        if (!Prone && Player.Ground.IsGrounded)
+            LieDown();
         else
             StandUp();
     }
 
-    public void Prone()
+    public void LieDown()
     {
-        player.ResetStance();
-        prone = true;
+        Player.ResetStance();
+        Prone = true;
         transform.localScale = new Vector3(1, proneScale, 1);
 
     }
 
     public void StandUp()
     {
-        prone = false;
+        Prone = false;
         transform.localScale = originalScale;
     }
 

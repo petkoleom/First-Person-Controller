@@ -16,21 +16,21 @@ public class scr_PlayerCrouch : scr_PlayerBehaviour
     private float slideSpeed;
 
     private Vector3 originalScale;
-    public bool crouching;
-    public bool sliding;
+    public bool IsCrouching;
+    public bool IsSliding;
 
 
     private void Start()
     {
         originalScale = transform.localScale;
-        crouching = false;
+        IsCrouching = false;
     }
 
-    public void OnCrouch(InputValue value)
+    public void OnCrouch(InputValue _value)
     {
-        if (player.state == PlayerState.Sprinting)
+        if (Player.State == PlayerState.Sprinting)
             StartCoroutine(Slide());
-        else if (!crouching && player.playerGround.isGrounded)
+        else if (!IsCrouching && Player.Ground.IsGrounded)
             Crouch();
         else
             StandUp();
@@ -38,25 +38,25 @@ public class scr_PlayerCrouch : scr_PlayerBehaviour
 
     public void Crouch()
     {
-        player.ResetStance();
-        crouching = true;
+        Player.ResetStance();
+        IsCrouching = true;
         transform.localScale = new Vector3(1, crouchScale, 1);
 
     }
 
     public void StandUp()
     {
-        crouching = false;
+        IsCrouching = false;
         transform.localScale = originalScale;
     }
 
     private IEnumerator Slide()
     {
-        Vector3 currentDir = player.orientation.forward;
-        sliding = true;
+        Vector3 _currentDir = Player.Orientation.forward;
+        IsSliding = true;
         transform.localScale = new Vector3(1, crouchScale, 1);
         yield return new WaitForSeconds(slideDuration);
-        sliding = false;
+        IsSliding = false;
         transform.localScale = originalScale;
     }
 

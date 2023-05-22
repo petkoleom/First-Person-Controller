@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class scr_WeaponRecoil : scr_WeaponBehaviour
@@ -8,22 +6,19 @@ public class scr_WeaponRecoil : scr_WeaponBehaviour
     private Vector3 currentRot, targetRot, currentPos, targetPos, originPos;
 
     [SerializeField]
-    private float snapiness, returnAmount;
-    private float kickback, recoilX, recoilY, recoilZ;
+    private float snapiness, returnAmount, kickback, recoilX, recoilY, recoilZ;
 
     [SerializeField]
-    private Transform camRecoil;
-
-    private Transform currentWeapon;
+    private Transform camRecoil, currentWeapon;
 
     public void Initialize()
     {
-        currentWeapon = weapon.GetCurrentWeapon();
+        currentWeapon = Weapon.GetCurrentWeapon();
         originPos = currentWeapon.transform.localPosition;
-        kickback = weapon.data.kickback;
-        recoilX = weapon.data.visualRecoil.x;
-        recoilY = weapon.data.visualRecoil.y;
-        recoilZ = weapon.data.visualRecoil.z;
+        kickback = Weapon.Data.Kickback;
+        recoilX = Weapon.Data.VisualRecoil.x;
+        recoilY = Weapon.Data.VisualRecoil.y;
+        recoilZ = Weapon.Data.VisualRecoil.z;
     }
 
     private void Update()
@@ -32,9 +27,6 @@ public class scr_WeaponRecoil : scr_WeaponBehaviour
         currentRot = Vector3.Slerp(currentRot, targetRot, Time.fixedDeltaTime * snapiness);
         currentWeapon.transform.localRotation = Quaternion.Euler(currentRot);
         CalculateKickback();
-
-
-
     }
 
     private void CalculateKickback()
@@ -42,7 +34,6 @@ public class scr_WeaponRecoil : scr_WeaponBehaviour
         targetPos = Vector3.Lerp(targetPos, originPos, Time.deltaTime * returnAmount);
         currentPos = Vector3.Lerp(currentPos, targetPos, Time.fixedDeltaTime * snapiness);
         currentWeapon.transform.localPosition = currentPos;
-
     }
 
     public void Recoil()

@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcdee01e9b4e1074bb9920989e4474b9, type: 3}
   m_Name: Claymore
   m_EditorClassIdentifier: 
-  explosiveName: Claymore
-  explosivePrefab: {fileID: 5509111409375614381, guid: 5b1b73be1e9850f4ba5469d09733cac5, type: 3}
-  explosionParticles: {fileID: 8870371148226882675, guid: 5bd698a7aa37ab34c82622b4905b6a72, type: 3}
-  damage: 200
-  radius: 5
-  ground:
+  Name: Claymore
+  Prefab: {fileID: 5509111409375614381, guid: 5b1b73be1e9850f4ba5469d09733cac5, type: 3}
+  Explosion: {fileID: 8870371148226882675, guid: 5bd698a7aa37ab34c82622b4905b6a72, type: 3}
+  Damage: 150
+  Radius: 5
+  Ground:
     serializedVersion: 2
-    m_Bits: 192
-  throwable: 0
-  throwDistance: 0
+    m_Bits: 384
+  Throwable: 0
+  ThrowDistance: 0
+  Delay: 0

@@ -3,58 +3,58 @@ using UnityEngine;
 public class scr_PlayerGround : scr_PlayerBehaviour
 {
     [Header("Grounding")]
-    public LayerMask ground;
+    public LayerMask Ground;
     [SerializeField]
     private float maxSlopeAngle = 40;
 
-    public bool isGrounded;
+    public bool IsGrounded;
     private GameObject currentGroundObject;
     [HideInInspector]
-    public RaycastHit slopeHit;
+    public RaycastHit SlopeHit;
     private Vector3 currentGroundNormal = Vector3.up;
 
-    private bool IsFloor(Vector3 v)
+    private bool IsFloor(Vector3 _v)
     {
-        float angle = Vector3.Angle(Vector3.up, v);
-        return angle < maxSlopeAngle;
+        float _angle = Vector3.Angle(Vector3.up, _v);
+        return _angle < maxSlopeAngle;
     }
 
-    private void OnCollisionStay(Collision collisionInfo)
+    private void OnCollisionStay(Collision _collisionInfo)
     {
-        foreach (ContactPoint contact in collisionInfo.contacts)
+        foreach (ContactPoint _contact in _collisionInfo.contacts)
         {
-            Vector3 normal = contact.normal;
-            if (IsFloor(normal))
+            Vector3 _normal = _contact.normal;
+            if (IsFloor(_normal))
             {
-                isGrounded = true;
-                currentGroundNormal = normal;
-                currentGroundObject = contact.otherCollider.gameObject;
+                IsGrounded = true;
+                currentGroundNormal = _normal;
+                currentGroundObject = _contact.otherCollider.gameObject;
                 return;
             }
 
-            else if (currentGroundObject == contact.otherCollider.gameObject)
+            else if (currentGroundObject == _contact.otherCollider.gameObject)
             {
-                isGrounded = false;
+                IsGrounded = false;
                 currentGroundObject = null;
             }
         }
     }
 
-    private void OnCollisionExit(Collision other)
+    private void OnCollisionExit(Collision _other)
     {
-        if (other.gameObject == currentGroundObject)
+        if (_other.gameObject == currentGroundObject)
         {
-            isGrounded = false;
+            IsGrounded = false;
             currentGroundObject = null;
         }
     }
 
     public bool OnSlope()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, .2f))
+        if (Physics.Raycast(transform.position, Vector3.down, out SlopeHit, .2f))
         {
-            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-            return angle < maxSlopeAngle && angle != 0;
+            float _angle = Vector3.Angle(Vector3.up, SlopeHit.normal);
+            return _angle < maxSlopeAngle && _angle != 0;
         }
         return false;
     }

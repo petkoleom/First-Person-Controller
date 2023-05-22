@@ -12,19 +12,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a3d05d16c6d8894d907eb0e9cc0fa1a, type: 3}
   m_Name: Shotgun
   m_EditorClassIdentifier: 
-  weaponName: Shotgun
-  weaponPrefab: {fileID: 777097838895640384, guid: 5461fdf0ef0d10d4e89acb761b424a7f, type: 3}
-  fireRate: 360
-  damage: 30
-  spread: 50
-  fireMode: 0
-  magSize: 6
-  ammoReserve: 480
-  ammoInMag: 12
-  ammoInReserve: 480
-  reloadSpeed: 0.5
-  horizontalRecoil: 40
-  verticalRecoil: 3
-  kickback: 0.15
-  visualRecoil: {x: -10, y: 10, z: 10}
-  adsSpeed: 0.01
+  Name: Shotgun
+  Prefab: {fileID: 777097838895640384, guid: 5461fdf0ef0d10d4e89acb761b424a7f, type: 3}
+  FireRate: 400
+  DamageCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 30
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 5
+      value: 30
+      inSlope: 0.0013803632
+      outSlope: 0.0013803632
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.23649724
+      outWeight: 0.024086485
+    - serializedVersion: 3
+      time: 30
+      value: 10
+      inSlope: -0.45084926
+      outSlope: -0.45084926
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.06507688
+    - serializedVersion: 3
+      time: 100
+      value: 2
+      inSlope: -0.114285715
+      outSlope: -0.114285715
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  Spread: 50
+  FireMode: 0
+  MagSize: 6
+  AmmoReserve: 900
+  AmmoInMag: 0
+  AmmoInReserve: 0
+  ReloadSpeed: 1
+  HorizontalRecoil: 0
+  VerticalRecoil: 0
+  Kickback: 0.2
+  VisualRecoil: {x: 5, y: 5, z: 5}
+  ADSSpeed: 0.01

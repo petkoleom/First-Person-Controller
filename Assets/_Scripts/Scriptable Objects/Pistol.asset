@@ -12,19 +12,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a3d05d16c6d8894d907eb0e9cc0fa1a, type: 3}
   m_Name: Pistol
   m_EditorClassIdentifier: 
-  weaponName: Pistol
-  weaponPrefab: {fileID: 792927488420783933, guid: 35e7b0abe2132234fb0cc2138bbf0546, type: 3}
-  fireRate: 360
-  damage: 30
-  spread: 20
-  fireMode: 0
-  magSize: 12
-  ammoReserve: 480
-  ammoInMag: 12
-  ammoInReserve: 480
-  reloadSpeed: 0.5
-  horizontalRecoil: 40
-  verticalRecoil: 3
-  kickback: 0.15
-  visualRecoil: {x: -10, y: 10, z: 10}
-  adsSpeed: 0.01
+  Name: Pistol
+  Prefab: {fileID: 792927488420783933, guid: 35e7b0abe2132234fb0cc2138bbf0546, type: 3}
+  FireRate: 500
+  DamageCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 30
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 15
+      value: 30
+      inSlope: 0.032533105
+      outSlope: 0.032533105
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.23649724
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 100
+      value: 5
+      inSlope: -0.29411766
+      outSlope: -0.29411766
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  Spread: 20
+  FireMode: 0
+  MagSize: 12
+  AmmoReserve: 900
+  AmmoInMag: 0
+  AmmoInReserve: 0
+  ReloadSpeed: 1
+  HorizontalRecoil: 0
+  VerticalRecoil: 0
+  Kickback: 0.2
+  VisualRecoil: {x: 2, y: 2, z: 2}
+  ADSSpeed: 0.01

@@ -15,12 +15,12 @@ public class scr_GameManager : PersistentSingleton<scr_GameManager>
         ChangeState(0);
     }
 
-    public void ChangeState(int newState)
+    public void ChangeState(int _newState)
     {
-        OnBeforeStateChanged?.Invoke((GameState)newState);
+        OnBeforeStateChanged?.Invoke((GameState)_newState);
 
-        State = (GameState)newState;
-        switch (newState)
+        State = (GameState)_newState;
+        switch (_newState)
         {
             case (int)GameState.Menu:
                 HandleMenu();
@@ -35,12 +35,12 @@ public class scr_GameManager : PersistentSingleton<scr_GameManager>
                 HandlePause();
                 break;
             default:
-                throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
+                throw new ArgumentOutOfRangeException(nameof(_newState), _newState, null);
         }
 
-        OnAfterStateChanged?.Invoke((GameState)newState);
+        OnAfterStateChanged?.Invoke((GameState)_newState);
 
-        Debug.Log($"New state: {(GameState)newState}");
+        Debug.Log($"New state: {(GameState)_newState}");
     }
 
     private void HandleMenu()

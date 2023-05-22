@@ -31,12 +31,12 @@ public class scr_PlayerCamBob : scr_PlayerBehaviour
 
     private void HeadBob()
     {
-        if (!player.playerGround.isGrounded) return;
-        if(player.playerMove.GetSpeed() > .1f)
+        if (!Player.Ground.IsGrounded) return;
+        if(Player.Move.GetSpeed() > .1f)
         {
 
-            timer += Time.deltaTime * player.playerMove.GetSpeed() * 1.25f;
-            headBob.transform.localPosition = new Vector3(headBob.transform.localPosition.x, defaultYPos + Mathf.Sin(timer) * (player.state == PlayerState.Crouching ? crouchBobAmount : player.state == PlayerState.Sprinting ? sprintBobAmount : walkBobAmount), headBob.transform.localPosition.z);
+            timer += Time.deltaTime * Player.Move.GetSpeed() * 1.25f;
+            headBob.transform.localPosition = new Vector3(headBob.transform.localPosition.x, defaultYPos + Mathf.Sin(timer) * (Player.State == PlayerState.Crouching ? crouchBobAmount : Player.State == PlayerState.Sprinting ? sprintBobAmount : walkBobAmount), headBob.transform.localPosition.z);
         }
     }
 

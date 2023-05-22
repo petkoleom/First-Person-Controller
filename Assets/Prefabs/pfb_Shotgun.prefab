@@ -47,6 +47,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f2b997b49043a742ab6309c10ddcbec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 0}
+  _networkObjectCache: {fileID: 0}
   weapon: {fileID: 0}
   shooting: 0
   bulletHole: {fileID: 5942079093229622927, guid: 1bee8d974a59aa2409d8b5bcd479a14d, type: 3}
@@ -62,6 +65,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33ffcc1fcee12b34a9d4434ea22bcc19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 1
+  _addedNetworkObject: {fileID: 0}
+  _networkObjectCache: {fileID: 0}
   weapon: {fileID: 0}
   reloading: 0
 --- !u!114 &-6781910890017894959
@@ -76,6 +82,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ed8b2c53715acd49a51b1c2ae4337db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 2
+  _addedNetworkObject: {fileID: 0}
+  _networkObjectCache: {fileID: 0}
   weapon: {fileID: 0}
   adsSpeed: 0.01
   hipPos: {x: 0, y: 0, z: 0}

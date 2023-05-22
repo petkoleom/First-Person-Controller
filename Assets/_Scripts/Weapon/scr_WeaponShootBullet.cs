@@ -8,5 +8,4 @@ public class scr_WeaponShootBullet : scr_WeaponShoot
     {
         RaycastShot();
     }
-
 }
