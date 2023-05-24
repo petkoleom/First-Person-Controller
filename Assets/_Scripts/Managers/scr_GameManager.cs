@@ -26,15 +26,10 @@ public class scr_GameManager : PersistentSingleton<scr_GameManager>
             case (int)GameState.Menu:
                 HandleMenu();
                 break;
-            case (int)GameState.StartHost:
-                StartCoroutine(HandleStartHost());
+            case (int)GameState.StartPlaying:
+                StartCoroutine(HandleStartPlaying());
                 break;
-            case (int)GameState.StartServer:
-                StartCoroutine(HandleStartServer());
-                break;
-            case (int)GameState.StartClient:
-                StartCoroutine(HandleStartClient());
-                break;
+
             case (int)GameState.Playing:
                 HandlePlaying();
                 break;
@@ -57,7 +52,8 @@ public class scr_GameManager : PersistentSingleton<scr_GameManager>
 
     }
 
-    private IEnumerator HandleStartHost()
+
+    private IEnumerator HandleStartPlaying()
     {
         scr_SceneManager.Instance.ChangeScene(1);
 
@@ -67,35 +63,7 @@ public class scr_GameManager : PersistentSingleton<scr_GameManager>
         }
 
         ChangeState((int)GameState.Playing);
-
-        NetworkManager.Singleton.StartHost();
-    }
-
-    private IEnumerator HandleStartServer()
-    {
-        scr_SceneManager.Instance.ChangeScene(1);
-
-        while (SceneManager.GetActiveScene().buildIndex != 1)
-        {
-            yield return null;
-        }
-
-        ChangeState((int)GameState.Playing);
-        
-        NetworkManager.Singleton.StartServer();
-    }
-    private IEnumerator HandleStartClient()
-    {
-        scr_SceneManager.Instance.ChangeScene(1);
-
-        while (SceneManager.GetActiveScene().buildIndex != 1)
-        {
-            yield return null;
-        }
-
-        ChangeState((int)GameState.Playing);
-
-        NetworkManager.Singleton.StartClient();
+        scr_PlayerManager.Instance.AddPlayer();
     }
 
     private void HandlePlaying()
@@ -119,9 +87,7 @@ public class scr_GameManager : PersistentSingleton<scr_GameManager>
 public enum GameState
 {
     Menu = 0,
-    Playing = 1,
-    Paused = 2,
-    StartHost = 7,
-    StartServer = 8,
-    StartClient = 9
+    StartPlaying = 1,
+    Playing = 2,
+    Paused = 3,
 }

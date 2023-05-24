@@ -19,17 +19,15 @@ public class scr_PlayerLook : scr_PlayerBehaviour
     [SerializeField]
     private Transform camParent;
 
-    private GameObject mainCam;
+    private Camera playerCam;
 
     public override void Initialize(scr_Player _player)
     {
         base.Initialize(_player);
         CamHolder = GameObject.FindGameObjectWithTag("CameraHolder").GetComponent<Transform>();
-        if (IsOwner)
-        {
-            mainCam = Instantiate(camPrefab, camParent.position, camParent.rotation).gameObject;
-            mainCam.transform.parent = camParent;
-        }
+        playerCam = Camera.main;
+        playerCam.transform.parent = camParent;
+
         Cursor.lockState = CursorLockMode.Locked;
 
     }

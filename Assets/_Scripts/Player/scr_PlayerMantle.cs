@@ -91,9 +91,4 @@ public class scr_PlayerMantle : scr_PlayerBehaviour
 
     }
 
-    private void OnDrawGizmos()
-    {
-        Debug.DrawRay(transform.position + Vector3.up * .7f, Player.Orientation.forward);
-    }
-
 }

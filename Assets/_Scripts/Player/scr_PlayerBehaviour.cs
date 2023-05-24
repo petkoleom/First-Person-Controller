@@ -1,7 +1,6 @@
-using Unity.Netcode;
 using UnityEngine;
 
-public class scr_PlayerBehaviour : NetworkBehaviour
+public class scr_PlayerBehaviour : MonoBehaviour
 {
     [HideInInspector]
     public scr_Player Player;

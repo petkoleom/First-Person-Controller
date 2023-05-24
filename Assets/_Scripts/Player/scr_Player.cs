@@ -1,8 +1,7 @@
 using System;
-using Unity.Netcode;
 using UnityEngine;
 
-public class scr_Player : NetworkBehaviour
+public class scr_Player : MonoBehaviour
 {
 
     public scr_PlayerManager PlayerManager { get; set; }
@@ -26,9 +25,8 @@ public class scr_Player : NetworkBehaviour
     public Transform Orientation { get; set; }
     public Transform CamHolder { get; set; }
 
-    public override void OnNetworkSpawn()
+    public void Awake()
     {
-        base.OnNetworkSpawn();
         Rb = GetComponent<Rigidbody>();
         Orientation = transform.GetChild(0);
         CamHolder = transform.root.GetChild(1);
